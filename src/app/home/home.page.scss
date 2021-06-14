@@ -1,0 +1,50 @@
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%); 
+  background-color: #f4f2f7 !important;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 60px;
+  padding-bottom: 50px;
+  border-radius: 10px;
+  color: rgb(7, 7, 7);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+
+  margin-bottom: 30px;
+}
+
+#container p {
+  font-size: 15px;
+  line-height: 22px;
+  margin: 30px 5px 30px 5px;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+#fondo {
+  background-color: #df15fa;
+}
+
+#headerPrincipal {
+  color: #fde26d !important;
+}
+
+#bienvenida1 {
+  text-align: left;
+  margin-left: 0px;
+  padding-left: 0px;
+  position: relative;
+}

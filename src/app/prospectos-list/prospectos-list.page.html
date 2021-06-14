@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="listaalumnos">Lista de Prospectos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="content-f1">
+  <div class="spin" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <div *ngIf="done">
+    <br>
+    <span> <b>Vendedor: </b> {{ auth.dataUser['displayName'] }} </span>
+    <br>
+
+    <ion-input type="text" #Filtro1  placeholder="Filtro por nombre..." (keyup)="updateFilter($event)" ></ion-input>
+
+    <br>
+    <ngx-datatable style="width: 100%;" class="material" [limit]="8" [rows]="rows" [rowHeight]="'auto'"
+      [scrollbarH]="true" [columnMode]='"force"' [sortType]="'multi'" [columnMode]="'standard'" [headerHeight]="50"
+      [footerHeight]="50">
+
+      <ngx-datatable-column name="idSistema" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>ID</b>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="estatus" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Estatus</b>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="f_creado" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>F Creado</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.f_creado.seconds * 1000 |date :'short' }}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="f_creado" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>F Mod</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.f_modificado.seconds * 1000 |date :'short' }}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="colonia" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Colonia</b>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="calle" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Calle</b>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="numero" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>No</b>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="contacto" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>¿Se contactó?</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value">
+          <ion-badge color="success" *ngIf="value==true">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </ion-badge>
+          <ion-badge color="danger" *ngIf="value==false">
+            <ion-icon name="close-circle"></ion-icon>
+          </ion-badge>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="interes" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>¿Tiene interes?</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.contacto">
+            <ion-badge color="success" *ngIf="row.interes==true">
+              <ion-icon name="checkmark-circle"></ion-icon>
+            </ion-badge>
+            <ion-badge color="danger" *ngIf="row.interes==false">
+              <ion-icon name="close-circle"></ion-icon>
+            </ion-badge>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="nombre_prosp" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Nombre Prospecto</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.interes">
+            {{ row.nombre_prosp }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="telefono_prosp" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Teléfono Prospecto</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.interes">
+            {{ row.telefono_prosp }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="prod_int" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Productos interés</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.interes">
+            <ion-badge *ngFor="let p of row.prod_int">{{ p }}</ion-badge>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="comentarios" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Comentarios</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.interes">
+            {{ row.comentarios }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="acciones" [cellClass]="'cell-datatable'">
+        <ng-template ngx-datatable-header-template>
+          <b>Acciones</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div *ngIf="row.estatus=='incompleto'">
+            <ion-button color="primary" style="border-radius: 10px;"
+            (click)="goToEdit(row)">
+            <ion-icon slot="start" ios="ios-create" md="md-create"></ion-icon>
+            Editar
+          </ion-button>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+    </ngx-datatable>
+
+  </div>
+</ion-content>

@@ -1,0 +1,23 @@
+<div class="header">
+  <div class="logo">
+    <img src="./assets/img/logo_principal.png" style="width: 60%;" class="logomenu">
+   
+  </div>
+</div>
+<div class="nav">
+  <ion-menu-toggle auto-hide="false" *ngFor="let p of paginas">
+    <div class="nav-item" [routerLink]="[p.url]">
+      <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+      {{p.title}}
+      <span class="divider"></span>
+    </div>
+  </ion-menu-toggle>
+  <ion-menu-toggle auto-hide="false">
+    <div class="nav-item" (click)="logoutApp()">
+      <ion-icon slot="start" [ios]="'exit-outline'" [md]="'exit-sharp'"></ion-icon>
+      Salir
+      <span class="divider"></span>
+    </div>
+  </ion-menu-toggle>
+</div>
+

@@ -1,0 +1,7 @@
+{
+  "name": "APP-QR-COVID",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

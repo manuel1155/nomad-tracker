@@ -1,0 +1,43 @@
+.spin{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+ }
+ ion-spinner {
+   transform: scale(2);
+   color: rgb(44, 81, 243);
+ }
+
+ ion-list{
+
+    background-color: transparent !important;
+ 
+    ion-item{
+       margin: 10px 20px 30px 20px;
+ 
+       border-radius: 15px;
+    }
+  }
+ 
+  #hamburguesa {
+   color: #fde26d !important;
+ }
+ 
+ #listaalumnos{
+   text-align: left;
+   margin-left: 0px;
+   padding-left: 0px;
+   position: relative;
+ }
+ 
+  .name{
+     margin: 0px;
+     padding: 0px;
+  }
+ 
+  .no-control{
+    margin: 0px;
+    padding: 0px;
+    color: #fde26d !important;
+  }

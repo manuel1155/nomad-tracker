@@ -1,0 +1,158 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1">Prospecto nuevo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="spin" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <div *ngIf="done">
+    <div *ngIf="!dataTrabajo"> sin asignación de trabajo </div>
+    <div *ngIf="dataTrabajo">
+      <form [formGroup]="DataProspForm">
+        <section>
+          <ion-list lines="none">
+
+            <ion-item>
+              <ion-label position="floating">Colonia: </ion-label>
+              <ion-input formControlName="colonia"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">CP: </ion-label>
+              <ion-input formControlName="cp"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Calle: </ion-label>
+              <ion-input formControlName="calle"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Número: </ion-label>
+              <ion-input formControlName="numero"></ion-input>
+            </ion-item>
+
+            <ion-radio-group formControlName="contacto">
+              <ion-list-header>
+                <ion-label>¿Hubo contacto?</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-label>Si</ion-label>
+                <ion-radio slot="start" [value]="true"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>No</ion-label>
+                <ion-radio slot="start" [value]="false"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+
+            <ion-radio-group formControlName="interes" *ngIf="f.contacto.value">
+              <ion-list-header>
+                <ion-label>¿Tiene interes?</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-label>Si</ion-label>
+                <ion-radio slot="start" [value]="true"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>No</ion-label>
+                <ion-radio slot="start" [value]="false"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+
+            <div *ngIf="f.interes.value">
+
+              <ion-item>
+                <ion-label position="floating">Nombre: </ion-label>
+                <ion-input formControlName="nombre_prosp"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Teléfono: </ion-label>
+                <ion-input type="tel" formControlName="telefono_prosp"></ion-input>
+              </ion-item>
+
+              <section *ngIf="(f.contacto.value && f.interes.value)">
+                <ion-segment scrollable [value]="foto_select" (ionChange)="segmentChanged($event)">
+                  <ion-segment-button *ngFor="let img of arrayImagenes" [value]="img.id" layout="icon-start">
+                    <ion-label>{{ img.titulo }}</ion-label>
+                    <ion-icon name="hourglass" *ngIf="!img.take"></ion-icon>
+                    <ion-icon name="checkmark-circle-outline" *ngIf="img.take"></ion-icon>
+                    <ion-icon [name]="img.icon"></ion-icon>
+                  </ion-segment-button>
+                </ion-segment>
+               
+                <div style="display:flex;justify-content:center" >
+                  <ion-list>
+                    <ion-item>
+                      <ion-button (click)="getCamara(foto_select)">
+                        Tomar foto
+                        <ion-icon slot="end" name="camera"></ion-icon>
+                      </ion-button>
+                      <ion-button (click)="getGaleria(foto_select)">
+                        Abrir galeria
+                        <ion-icon slot="end" name="albums"></ion-icon>
+                      </ion-button>
+                    </ion-item>
+                    <ion-item>
+                      <img [src]="getImg(foto_select)"/>
+                    </ion-item>
+                  </ion-list>
+                </div>
+      
+              </section>
+
+              <ion-list>
+                <ion-list-header>Productos de interés</ion-list-header>
+                <ion-item *ngFor="let producto of prod_int">
+                  <ion-label>{{producto.val}}</ion-label>
+                  <ion-checkbox slot="end" [(ngModel)]="producto.isChecked" [ngModelOptions]="{standalone: true}">
+                  </ion-checkbox>
+                </ion-item>
+              </ion-list>
+
+              <ion-item>
+                <ion-label position="floating">Comentarios: </ion-label>
+                <ion-textarea formControlName="comentarios" placeholder="Comentarios del prospecto..."></ion-textarea>
+              </ion-item>
+            </div>
+
+          </ion-list>
+        </section>
+       
+        <section>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div>
+                  <ion-button id="botonenviar1" expand="block" style="border-radius: 10px;"
+                    [disabled]="!this.DataProspForm.valid" (click)="guardarProspecto()">
+                    <ion-icon slot="start" ios="send-outline" md="send-sharp"></ion-icon>
+                    Enviar
+                  </ion-button>
+                </div>
+              </ion-col>
+              <ion-col>
+                <div>
+                  <ion-button id="botoncancelar1" color="danger" expand="block" style="border-radius: 10px;"
+                    (click)="cancelProsp()">
+                    <ion-icon slot="start" ios="arrow-back-outline" md="arrow-back-sharp"></ion-icon>
+                    Cancelar
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </section>
+      </form>
+    </div>
+  </div>
+</ion-content>
