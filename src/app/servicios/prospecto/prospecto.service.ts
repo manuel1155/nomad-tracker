@@ -16,13 +16,13 @@ export class ProspectoService {
     return new Promise((resolve) => {     
       post['idSistema'] = post['id'].substring(0, 5).toUpperCase();
       console.log(post);
-      this.afs.collection('smaug/ecogarmoncfe/usuarios/' + post['user_reg'] + '/ubicaciones_cambaceo').add({
+      this.afs.collection('smaug/totalconcretos/usuarios/' + post['user_reg'] + '/ubicaciones_cambaceo').add({
         f_registro: new Date(),
         user_reg: post['user_reg'],
         ubicacion: post['ubicacion'],
         idProspecto: post['id']
       }).then(() => {
-        this.afs.doc('smaug/ecogarmoncfe/prosp_cambaceo/' + post['id']).set(post).then(() => {
+        this.afs.doc('smaug/totalconcretos/prosp_cambaceo/' + post['id']).set(post).then(() => {
           resolve({ success: true, idSistema: post['idSistema'] })
         });
       });
@@ -31,7 +31,7 @@ export class ProspectoService {
 
   updateProsp(post:any) {
     return new Promise((resolve) => {
-      this.afs.doc('smaug/ecogarmoncfe/prosp_cambaceo/' + post['id']).update(post).then(() => {
+      this.afs.doc('smaug/totalconcretos/prosp_cambaceo/' + post['id']).update(post).then(() => {
         resolve({ success: true, idSistema: post['idSistema'] })
       }).catch(() => {
         resolve('error');
@@ -49,7 +49,7 @@ export class ProspectoService {
     let iDia = new Date(inicioDia);
     let fDia = new Date(finDia);
     console.log('consulta del dia '+iDia);
-    return this.afs.collection('smaug').doc('ecogarmoncfe').collection('prosp_cambaceo', ref =>
+    return this.afs.collection('smaug').doc('totalconcretos').collection('prosp_cambaceo', ref =>
       ref
         .where('user_reg', '==', idVendedor)
         .orderBy('f_modificado')
@@ -67,7 +67,7 @@ export class ProspectoService {
     let fDia = new Date(finDia);
 
     console.log('consulta incompletos '+fDia);
-    return this.afs.collection('smaug').doc('ecogarmoncfe').collection('prosp_cambaceo', ref =>
+    return this.afs.collection('smaug').doc('totalconcretos').collection('prosp_cambaceo', ref =>
       ref
         .where('user_reg', '==', idVendedor)
         .where('estatus', '==', 'incompleto')

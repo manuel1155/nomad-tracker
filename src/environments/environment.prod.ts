@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyCFCvibThfKCZ9WjnVHggmXbNNUowdyPmM",
-    authDomain: "dln-covid-control.firebaseapp.com",
-    databaseURL: "https://dln-covid-control.firebaseio.com",
-    projectId: "dln-covid-control",
-    storageBucket: "dln-covid-control.appspot.com",
-    messagingSenderId: "1034892410447",
-    appId: "1:1034892410447:web:7f955a2a3649439c93b43a",
-    measurementId: "G-XLFQQFKTWK"
+    apiKey: "AIzaSyC1KEdroeVIiJ8FyBJ5gviCskLWv8RUMRc",
+    authDomain: "nomad-knight.firebaseapp.com",
+    databaseURL: "https://nomad-knight.firebaseio.com",
+    projectId: "nomad-knight",
+    storageBucket: "nomad-knight.appspot.com",
+    messagingSenderId: "836142479533",
+    appId: "1:836142479533:web:80a5192ca3b42cd11eae24",
+    measurementId: "G-0Q5EFCEEXG"
   }
 };

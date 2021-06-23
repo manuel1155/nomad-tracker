@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="end" id="headerPrincipal">
+      <ion-button *ngIf="origen=='cliente'" (click)="goToClientes()">
+        Cancelar
+      </ion-button>
+      <ion-button *ngIf="origen=='modal'" (click)="closeModal()">
+        Cancelar
+      </ion-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1" *ngIf="!currentCli">Nuevo cliente</ion-title>
+    <ion-title id="bienvenida1" *ngIf="currentCli">Editar cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content content-f1">
+  <ion-list>
+    <form [formGroup]="formCliente">
+      <ion-item>
+        <ion-label position="floating">Nombre: </ion-label>
+        <ion-input formControlName="nombre_cli"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">RFC: </ion-label>
+        <ion-input formControlName="rfc_cli"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nombre contacto (admin): </ion-label>
+        <ion-input formControlName="name_cont_admin_cli"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Número de contacto (admin): </ion-label>
+        <ion-input type="tel" formControlName="num_cont_admin_cli"></ion-input>
+      </ion-item>
+    </form>
+
+    <section class="ion-text-center" >
+      <ion-button color="success" [disabled]="!formCliente.valid" (click)="guardarCli()" >
+        Guardar  <ion-icon name="checkmark-circle"></ion-icon>
+      </ion-button>
+    </section>
+
+  </ion-list>
+</ion-content>

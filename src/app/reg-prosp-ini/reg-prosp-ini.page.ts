@@ -579,7 +579,7 @@ export class RegProspIniPage implements OnInit, OnDestroy {
     return new Promise<string>((resolve) => {
       let storageRef = firebase.storage().ref();
 
-      const imageRef = storageRef.child(`uploads/ecogarmoncfe/cambaceo/${idPros}/${filename}.jpg`);
+      const imageRef = storageRef.child(`uploads/totalconcretos/cambaceo/${idPros}/${filename}.jpg`);
 
       imageRef.putString(imgBase64, firebase.storage.StringFormat.DATA_URL)
         .then((snapshot) => {

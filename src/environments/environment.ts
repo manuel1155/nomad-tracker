@@ -5,13 +5,14 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyC9VzH9GAhPrxv_d4qiljumpSkKzeSbaS0",
-    authDomain: "hrms-6da80.firebaseapp.com",
-    databaseURL: "https://hrms-6da80.firebaseio.com",
-    projectId: "hrms-6da80",
-    storageBucket: "hrms-6da80.appspot.com",
-    messagingSenderId: "828190286315",
-    appId: "1:828190286315:web:bf16f7eda8a42382a379ae"
+    apiKey: "AIzaSyC1KEdroeVIiJ8FyBJ5gviCskLWv8RUMRc",
+    authDomain: "nomad-knight.firebaseapp.com",
+    databaseURL: "https://nomad-knight.firebaseio.com",
+    projectId: "nomad-knight",
+    storageBucket: "nomad-knight.appspot.com",
+    messagingSenderId: "836142479533",
+    appId: "1:836142479533:web:80a5192ca3b42cd11eae24",
+    measurementId: "G-0Q5EFCEEXG"
   }
 };
 

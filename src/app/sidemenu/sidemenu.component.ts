@@ -20,13 +20,18 @@ export class SidemenuComponent implements OnInit {
       url: '/home',
       icon: 'home'
     },{
-      title: 'Reg Prosp',
-      url: '/reg-prosp-ini',
-      icon: 'clipboard'
-    },{
-      title: 'Mis Prospectos',
-      url: '/prospectos-list',
+      title: 'Clientes',
+      url: '/clientes',
       icon: 'people'
+    },{
+      title: 'Obras',
+      url: '/obras',
+      icon: 'construct'
+    },
+    {
+      title: 'Reg Visita',
+      url: '/add-visita',
+      icon: 'map'
     }
 
   ];

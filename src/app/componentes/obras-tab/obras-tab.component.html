@@ -1,0 +1,66 @@
+<div class="spin" *ngIf="!done">
+  <ion-spinner name="bubbles"></ion-spinner>
+</div>
+
+<div *ngIf="done">
+  <ion-input type="text" #Filtro1  placeholder="Filtro por nombre..."  (keyup)="updateFilter($event)"></ion-input>
+  <br>
+  <ngx-datatable style="width: 100%;" class="material" [limit]="8" [rows]="rows" [rowHeight]="'auto'"
+    [scrollbarH]="true" [columnMode]="'force'" [sortType]="'multi'" [headerHeight]="50" [footerHeight]="50"
+    [limit]="4">
+
+    <ngx-datatable-column name="idSistema" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>ID</b>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="nombre_obra" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Nombre obra</b>
+      </ng-template>
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{row.nombre_obra}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="resp_obra" [sortable]="true" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Responsable</b>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="f_creado" [sortable]="true" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>F Creado</b>
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        {{ row.f_creado.seconds * 1000 |date :'short' }}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="estatus" [sortable]="true" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Estatus</b>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="acciones" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Acciones</b>
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        <div>
+          <ion-button color="primary" *ngIf="origen=='obra'" style="border-radius: 10px;" (click)="goToEditObra(row)">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button color="success" *ngIf="origen=='visita'" style="border-radius: 10px;" (click)="selectCliente(row)">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </ion-button>
+          
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+
+  <section *ngIf="origen=='visita'" >
+    <ion-button (click)="addClienteModal()">
+      Nuevo<ion-icon name="add-circle"></ion-icon>
+    </ion-button>
+  </section>
+</div>

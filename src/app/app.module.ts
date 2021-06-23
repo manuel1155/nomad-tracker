@@ -27,6 +27,8 @@ registerLocaleData(localeMX);
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [AppComponent,SidemenuComponent],
@@ -40,13 +42,15 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     AngularFireDatabaseModule,
     NgxDatatableModule,
     AngularFirestoreModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyDtomsm7eXWYIgxXUVzzuURGRJYWxwTbb8'})
   ],
   providers: [
     StatusBar,
     SplashScreen,
     DatePipe,
     Geolocation,
+    NativeGeocoder,
     AndroidPermissions,
     LocationAccuracy,
     AngularFirestoreModule,

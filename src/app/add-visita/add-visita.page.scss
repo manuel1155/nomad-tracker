@@ -1,0 +1,63 @@
+.map {
+    height: 400px;
+    width: 100%;
+  }
+
+  .form-content{
+    --padding-bottom: 16px;
+    --padding-end: 16px;
+    --padding-start: 16px;
+    --padding-top: 22px;
+}
+
+ion-list ion-item{
+  border-radius: 7px;
+  margin-bottom: 15px;
+  margin: 15px;
+  
+}
+
+.principal{
+  background-color: #553781 !important;
+  border-radius: 10px;
+  width: auto;
+  margin-top: 15px !important;
+  margin-bottom: 15px;
+}
+
+.pregunta{
+  padding-top: 15px;
+  color:#45403F;
+}
+
+.pregunta2{
+    font-size: medium;
+    line-height: 1.3em;
+    color: rgb(102, 102, 102);
+    line-height: 1.3em;
+    margin-top: 1px;
+    margin-right: 0px;
+  }
+
+  #posicionp2{
+    position: relative;
+    height: auto;
+    padding-top: 0px;
+    padding-bottom: 70px;
+  }
+  
+  #sidos{
+    position: fixed;
+    left: 9px;
+    margin: 0px !important;
+    color:#66577a;
+    font-weight: bold;
+  }
+
+#botonenviar1{
+    width: auto;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    //border-radius: 10px !important;
+  }

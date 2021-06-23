@@ -260,15 +260,17 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .header-f1{
-  --background: #eb4949;
+  --background: #0c0b0b;
 
   ion-title{
-    --color: #ff9f83;
+    --color: #c5b20a;
   }
+
+  --color:white; 
 }
 
 .content-principal-f1{
-  --background: url(./../assets/img/fondo_asi_login.jpg) 0 0/100% 100% no-repeat;
+  --background: url(./../assets/img/total_login.png) 0 0/100% 100% no-repeat;
 }
 
 .content-f1{

@@ -23,6 +23,26 @@ const routes: Routes = [
     path: 'prospectos-list',
     loadChildren: () => import('./prospectos-list/prospectos-list.module').then( m => m.ProspectosListPageModule)
   },
+  {
+    path: 'add-visita',
+    loadChildren: () => import('./add-visita/add-visita.module').then( m => m.AddVisitaPageModule)
+  },
+  {
+    path: 'add-cliente',
+    loadChildren: () => import('./add-cliente/add-cliente.module').then( m => m.AddClientePageModule)
+  },
+  {
+    path: 'add-obra',
+    loadChildren: () => import('./add-obra/add-obra.module').then( m => m.AddObraPageModule)
+  },
+  {
+    path: 'clientes',
+    loadChildren: () => import('./clientes/clientes.module').then( m => m.ClientesPageModule)
+  },
+  {
+    path: 'obras',
+    loadChildren: () => import('./obras/obras.module').then( m => m.ObrasPageModule)
+  },
 ];
 
 @NgModule({

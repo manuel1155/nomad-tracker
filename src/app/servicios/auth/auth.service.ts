@@ -81,7 +81,7 @@ export class AuthService {
  
   async getUserData() {
     return new Promise(resolve => {
-        this.afs.doc('smaug/ecogarmoncfe/usuarios/' + this.currentUserId).valueChanges().subscribe(data => {
+        this.afs.doc('smaug/totalconcretos/usuarios/' + this.currentUserId).valueChanges().subscribe(data => {
           if(data){
             this.dataUser = data;
             resolve('success');

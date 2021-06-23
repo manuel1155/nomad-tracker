@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end" id="headerPrincipal" *ngIf="currentCli!=null">
+      <ion-button (click)="goToAddObra(currentCli)">
+        Nueva<ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1" *ngIf="currentCli==null">Todas las Obras</ion-title>
+    <ion-title id="bienvenida1" *ngIf="currentCli!=null">Obras por Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class='content-cli content-f1'>
+  <span *ngIf="currentCli!=null">
+    Listado de obras del cliente: {{ currentCli.nombre_cli }}
+  </span>
+  <app-obras-tab #tabObras [detCliente]="currentCli"></app-obras-tab>
+<br>
+  <section class="ion-text-center">
+    <ion-button color="warning" (click)="backClientes()">
+      <ion-icon name="arrow-back"></ion-icon> Regresar
+    </ion-button>
+  </section>
+</ion-content>

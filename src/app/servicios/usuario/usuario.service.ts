@@ -20,7 +20,7 @@ export class UsuarioService {
   }
 
   setCounterUsers(cant: number) {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       this.afs.collection('app-covid').doc('selacademy').collection('usuarios').doc('counter').update({ counter: cant }).then(() => {
         resolve();
       })
@@ -30,7 +30,7 @@ export class UsuarioService {
   async createUser(post) {
     let id = this.afs.createId();
     post['id'] = id;
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       console.log('entra promise')
       this.afs.collection('app-covid').doc('selacademy').collection('usuarios').doc(post['id']).set(post).then(
         (success) => {
