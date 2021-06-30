@@ -23,15 +23,24 @@ export class AddObraPage implements OnInit {
   currentCli: any = null;
   currentObra: any = null;
 
-  @ViewChild('mapElement', { static: false }) mapElement: ElementRef;
+  //@ViewChild('mapElement', { static: false }) mapElement: ElementRef;
   lat: number;
   lon: number;
   options: GeolocationOptions;
   currentPos: Geoposition;
   public map: any;
-  public marker: any;
   public geoCoder: any;
   public direccion;
+
+  private step=1;
+
+  latitude: -99.609050;
+  longitude: 22.398134;
+  marker: {
+    latitude: number,
+    longitude: number,
+    draggable: true
+  };
 
   @Input() origen: string = 'obra';
 
@@ -81,17 +90,17 @@ export class AddObraPage implements OnInit {
     this.lat = this.currentObra.lat_obra;
     this.lon = this.currentObra.lon_obra;
 
-    console.log('Obra lat: '+this.lat);
-    console.log('Obra lon: '+this.lon);
+    console.log('Obra lat: ' + this.lat);
+    console.log('Obra lon: ' + this.lon);
 
     this.geoCoder = new google.maps.Geocoder();
-    this.map = new google.maps.Map(
+    /*this.map = new google.maps.Map(
       this.mapElement.nativeElement,
       {
         center: { lat: this.lat, lng: this.lon },
         zoom: 16
       }
-    );
+    );*/
     //this.getAddressFromCoords(this.lat, this.lon);
     const position = new google.maps.LatLng(this.lat, this.lon);
     this.marker = new google.maps.Marker({
@@ -100,15 +109,7 @@ export class AddObraPage implements OnInit {
       map: this.map,
       draggable: true
     });
-    google.maps.event.addListener(this.marker, 'dragend', () => {
-      console.log(this.marker.getPosition());
-      console.log("lat: " + this.marker.position.lat());
-      console.log("lng: " + this.marker.position.lng());
-      this.lat = this.marker.position.lat();
-      this.lon = this.marker.position.lon();
-      this.getAddressFromCoords(this.marker.position.lat(), this.marker.position.lng());
 
-    });
   }
 
   ngOnInit() {
@@ -162,14 +163,14 @@ export class AddObraPage implements OnInit {
                     console.log(this.lon);
                     console.log('termina init');
 
-                    this.geoCoder = new google.maps.Geocoder();
+                    /*this.geoCoder = new google.maps.Geocoder();
                     this.map = new google.maps.Map(
                       this.mapElement.nativeElement,
                       {
                         center: { lat: this.lat, lng: this.lon },
                         zoom: 16
                       }
-                    );
+                    );*/
                     this.getAddressFromCoords(this.lat, this.lon);
                     const position = new google.maps.LatLng(this.lat, this.lon);
                     this.marker = new google.maps.Marker({
@@ -177,13 +178,6 @@ export class AddObraPage implements OnInit {
                       title: 'Mi casa',
                       map: this.map,
                       draggable: true
-                    });
-                    google.maps.event.addListener(this.marker, 'dragend', () => {
-                      console.log("dragend lat: " + this.marker.position.lat());
-                      console.log("dragend lng: " + this.marker.position.lng());
-
-                      this.getAddressFromCoords(this.marker.position.lat(), this.marker.position.lng());
-
                     });
                   }
                 });
@@ -211,6 +205,15 @@ export class AddObraPage implements OnInit {
     } else {
       console.log('sin datos')
     }
+  }
+
+  onMapClicked($event) {
+    console.log($event);
+    this.marker = {
+      latitude: $event.coords.lat,
+      longitude: $event.coords.lng,
+      draggable: true
+    };
   }
 
   getAddressFromCoords(lattitude, longitude) {
@@ -308,6 +311,7 @@ export class AddObraPage implements OnInit {
   }
 
   goToObras() {
+    console.log(this.currentCli)
     let navigationExtras: NavigationExtras = {
       state: {
         detCli: this.currentCli,
@@ -330,52 +334,52 @@ export class AddObraPage implements OnInit {
 
     let post = this.formObra.value;
 
-    /* if (this.currentCli) {
-       post['user_mod'] = this.auth.currentUserId;
-       post['f_modificado'] = new Date();
-       post['idSistema'] = this.currentCli.idSistema;
-       post['id'] = this.currentCli.id;
-       this.cliService.updateCliente(post).then((data) => {
-         Swal.close();
-         Swal.fire({
-           title: "Cliente modificado",
-           text: "El cliente ha sido modificado correctamente.",
-           icon: 'success',
-           confirmButtonText: 'Aceptar'
-         }).then(() => {
-           this.formCliente.reset();
-           this.router.navigate(['/clientes']);
-         });
-       });
-     }
-     else {*/
-    post['user_reg'] = this.auth.currentUserId;
-    post['lat_obra'] = this.lat;
-    post['lon_obra'] = this.lon;
-    post['ubic_obra'] = new firebase.firestore.GeoPoint(this.lat, this.lon)
-    post['direccion_google'] = this.direccion;
-    post['estatus'] = 'activa';
-    post['idCli'] = this.currentCli.id;
-
-    this.obrasServ.createObra(post).then((data) => {
-      Swal.close();
-      Swal.fire({
-        title: "Obra registrada",
-        text: "El obra ha sido registrada correctamente; el ID con el que se registro es " + data['idSistema'] + ".",
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-      }).then(() => {
-        this.formObra.reset();
-        this.lat = null;
-        this.lat = null;
-        //if (this.origen == 'modal') this.modalController.dismiss({ 'success': true });
-        //else this.router.navigate(['/clientes']);
-        this.goToObras();
+    if (this.currentObra) {
+      post['user_mod'] = this.auth.currentUserId;
+      post['f_modificado'] = new Date();
+      post['idSistema'] = this.currentCli.idSistema;
+      post['id'] = this.currentCli.id;
+      this.obrasServ.updateObra(post).then((data) => {
+        Swal.close();
+        Swal.fire({
+          title: "Obra modificada",
+          text: "La obra ha sido modificado correctamente.",
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          this.formObra.reset();
+          this.goToObras();
+        });
       });
-    });
+    }
+    else {
+      post['user_reg'] = this.auth.currentUserId;
+      post['lat_obra'] = this.lat;
+      post['lon_obra'] = this.lon;
+      post['ubic_obra'] = new firebase.firestore.GeoPoint(this.lat, this.lon)
+      post['direccion_google'] = this.direccion;
+      post['estatus'] = 'activa';
+      post['idCli'] = this.currentCli.id;
+
+      this.obrasServ.createObra(post).then((data) => {
+        Swal.close();
+        Swal.fire({
+          title: "Obra registrada",
+          text: "El obra ha sido registrada correctamente; el ID con el que se registro es " + data['idSistema'] + ".",
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          this.formObra.reset();
+          this.lat = null;
+          this.lat = null;
+          //if (this.origen == 'modal') this.modalController.dismiss({ 'success': true });
+          //else this.router.navigate(['/clientes']);
+          this.goToObras();
+        });
+      });
 
 
-    // }
+    }
 
   }
 

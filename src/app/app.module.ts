@@ -28,7 +28,6 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
-import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [AppComponent,SidemenuComponent],
@@ -43,7 +42,6 @@ import { AgmCoreModule } from '@agm/core';
     NgxDatatableModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
-    AgmCoreModule.forRoot({apiKey: 'AIzaSyDtomsm7eXWYIgxXUVzzuURGRJYWxwTbb8'})
   ],
   providers: [
     StatusBar,

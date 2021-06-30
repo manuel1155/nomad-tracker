@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="end" id="headerPrincipal">
+      <ion-button (click)="goToObras()">
+        Cancelar
+      </ion-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1">Crear Obra</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="spin spinner-center" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <div *ngIf="done">
+    <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
+      <ion-item>
+        <ion-label> <b>Ubicación de la obra: </b></ion-label>
+      </ion-item>
+      <ion-item-sliding>
+        <agm-map [style.height.px]="height" [zoom]="zoom" [latitude]="lat" [longitude]="lng">
+          <agm-marker *ngFor="let marker of listaObras" 
+            [iconUrl]=" iconData"
+            [latitude]="marker.lat_obra"
+            [longitude]="marker.lon_obra"
+            [markerDraggable]="false">
+            <agm-info-window #infoWindow>
+              <strong>Obra:</strong> {{ marker.nombre_obra }} <br>
+              <strong>Vendedor:</strong> {{ marker.vendedor_name }} <br>
+              <strong>estatus:</strong> {{ marker.estatus }}
+            </agm-info-window>
+          </agm-marker>
+          <agm-marker [markerDraggable]="true" [latitude]="lat" [longitude]="lng" (dragEnd)="markerDragEnd($event)">
+          </agm-marker>
+        </agm-map>
+      </ion-item-sliding>
+      <ion-item class="rounded">
+        <div>
+          <br>
+          <p> <b>Dirección Google Maps: </b></p>
+          <p> {{ direccion }}</p>
+        </div>
+      </ion-item>
+
+      <form [formGroup]="formObra">
+
+        <ion-item>
+          <ion-label position="floating">Confirmar dirección: </ion-label>
+          <ion-textarea class="rounded" rows="3" formControlName="direccion_vendedor" placeholder="Dirección de la obra...">
+          </ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Nombre de obra: </ion-label>
+          <ion-input class="rounded" formControlName="nombre_obra" placeholder="Nombre de la obra"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Tipo obra: </ion-label>
+          <ion-input class="rounded" formControlName="tipo_obra" placeholder="Tipo de obra"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Responsable obra: </ion-label>
+          <ion-input class="rounded" formControlName="resp_obra" placeholder="Responsable de la obra"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Contacto responasable: </ion-label>
+          <ion-input class="rounded" type="tel" formControlName="cont_resp" placeholder="000-000-0000"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Comentarios:</ion-label>
+          <ion-textarea class="rounded" rows="3" formControlName="comentarios" placeholder="Dirección de la obra..."></ion-textarea>
+        </ion-item>
+
+      </form>
+
+      <section class="ion-text-center">
+        <ion-button color="success" [disabled]="!formObra.valid" (click)="guardarObra()">
+          Guardar <ion-icon name="checkmark-circle"></ion-icon>
+        </ion-button>
+      </section>
+
+    </ion-list>
+  </div>
+</ion-content>

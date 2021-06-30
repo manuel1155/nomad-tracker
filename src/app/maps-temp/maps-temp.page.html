@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>mapsTemp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="spin spinner-center" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <div *ngIf="done">
+    <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
+      <ion-item>
+        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
+      </ion-item>
+      <ion-item-sliding>
+        <agm-map [style.height.px]="height" [zoom]="zoom" [latitude]="lat" [longitude]="lng">
+          <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+        </agm-map>
+      </ion-item-sliding>
+      <ion-item>
+        <h5>Address: {{address}}</h5>
+  <div>Latitude: {{lat}}</div>
+  <div>Longitude: {{lng}}</div>
+      </ion-item>
+      <ion-item>
+        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

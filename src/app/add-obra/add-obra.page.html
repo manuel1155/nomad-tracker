@@ -10,37 +10,36 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="form-content content-f1">
-
   <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
-    <ion-item>
-      <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
-    </ion-item>
-    <ion-item-sliding>
-      <agm-map [latitude]="latitude"
-           [longitude]="longitude"
-           (mapClick)="onMapClicked($event)">
-    <agm-marker *ngIf="marker"
-                [latitude]="marker.latitude"
-                [longitude]="marker.longitude"
-                [markerDraggable]="marker.draggable"></agm-marker>
-  </agm-map>
-    </ion-item-sliding>
-    <ion-item>
-      <div>
-        <br>
-        <p> <b>Dirección Google Maps: </b></p>
-        <p> {{ direccion }}</p>
-      </div>  
-    </ion-item>
-
-    <form [formGroup]="formObra">
-
+    <div *ngIf="step==1">
       <ion-item>
-        <ion-label position="floating">Confirmar dirección: </ion-label>
-        <ion-textarea rows="3" formControlName="direccion_vendedor" placeholder="Dirección de la obra...">
-        </ion-textarea>
+        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
+      </ion-item>
+      <ion-item-sliding>
+        <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="onMapClicked($event)">
+          <agm-marker *ngIf="marker" [latitude]="marker.latitude" [longitude]="marker.longitude"
+            [markerDraggable]="marker.draggable"></agm-marker>
+        </agm-map>
+      </ion-item-sliding>
+      <ion-item>
+        <div>
+          <br>
+          <p> <b>Dirección Google Maps: </b></p>
+          <p> {{ direccion }}</p>
+        </div>
       </ion-item>
 
+      <form [formGroup]="formObra">
+
+        <ion-item>
+          <ion-label position="floating">Confirmar dirección: </ion-label>
+          <ion-textarea rows="3" formControlName="direccion_vendedor" placeholder="Dirección de la obra...">
+          </ion-textarea>
+        </ion-item>
+
+    </div>
+
+    <div *ngIf="step==2">
       <ion-item>
         <ion-label position="floating">Nombre de obra: </ion-label>
         <ion-input formControlName="nombre_obra" placeholder="Nombre de la obra"></ion-input>
@@ -66,8 +65,8 @@
         <ion-textarea rows="3" formControlName="comentarios" placeholder="Dirección de la obra..."></ion-textarea>
       </ion-item>
 
-    </form>
-
+      </form>
+    </div>
     <section class="ion-text-center">
       <ion-button color="success" [disabled]="!formObra.valid" (click)="guardarObra()">
         Guardar <ion-icon name="checkmark-circle"></ion-icon>

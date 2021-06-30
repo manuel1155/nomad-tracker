@@ -427,25 +427,28 @@ export class RegProspIniPage implements OnInit, OnDestroy {
   }
 
   checkGPSPermission() {
+    console.log('Checando los permisos de la APP');
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
       result => {
         if (result.hasPermission) {
-
+          console.log('app CON permisos');
           //If having permission show 'Turn On GPS' dialogue
           this.askToTurnOnGPS();
         } else {
-
+          console.log('app SIN permisos');
           //If not having permission ask for permission
           this.requestGPSPermission();
         }
       },
       err => {
+        console.log('error de librerias')
         alert(err);
       }
     );
   }
 
   requestGPSPermission() {
+    console.log('solicitar permisos de al usuario');
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         console.log("4");
@@ -455,10 +458,12 @@ export class RegProspIniPage implements OnInit, OnDestroy {
           .then(
             () => {
               // call method to turn on GPS
+              console.log('usuario otorga permisos a la APP');
               this.askToTurnOnGPS();
             },
             error => {
               //Show alert if user click on 'No Thanks'
+              console.log('usuario niega permisos a la APP');
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -476,10 +481,12 @@ export class RegProspIniPage implements OnInit, OnDestroy {
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
       () => {
+        console.log('usuario activa el GPS');
         // When GPS Turned ON call method to get Accurate location coordinates
         this.getGeolocation()
       },
       error => {
+        console.log('Usuario no activa el GPS');
         alert('Error requesting location permissions ' + JSON.stringify(error))
         Swal.fire({
           icon: 'error',

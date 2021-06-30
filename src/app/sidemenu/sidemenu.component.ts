@@ -33,7 +33,6 @@ export class SidemenuComponent implements OnInit {
       url: '/add-visita',
       icon: 'map'
     }
-
   ];
 
   

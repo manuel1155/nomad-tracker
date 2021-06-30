@@ -43,6 +43,18 @@ const routes: Routes = [
     path: 'obras',
     loadChildren: () => import('./obras/obras.module').then( m => m.ObrasPageModule)
   },
+  {
+    path: 'maps-temp',
+    loadChildren: () => import('./maps-temp/maps-temp.module').then( m => m.MapsTempPageModule)
+  },
+  {
+    path: 'check-permisos',
+    loadChildren: () => import('./check-permisos/check-permisos.module').then( m => m.CheckPermisosPageModule)
+  },
+  {
+    path: 'add-obra-mod',
+    loadChildren: () => import('./add-obra-mod/add-obra-mod.module').then( m => m.AddObraModPageModule)
+  },
 ];
 
 @NgModule({

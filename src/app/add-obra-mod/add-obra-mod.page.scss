@@ -1,0 +1,76 @@
+.spinner-center{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  ion-spinner {
+    transform: scale(3);
+}
+
+.form-content{
+  --padding-bottom: 16px;
+  --padding-end: 16px;
+  --padding-start: 16px;
+  --padding-top: 22px;
+}
+
+ion-list ion-item{
+border-radius: 7px;
+margin-bottom: 15px;
+margin: 15px;
+}
+
+ion-label{
+  font-weight: bold;
+  font: size 40px;
+}
+
+.rounded {
+  padding: 2px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 10px;
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  background-color:rgba(69, 110, 185, 0.3)
+}
+
+.pregunta{
+padding-top: 15px;
+color:#45403F;
+}
+
+.pregunta2{
+  font-size: medium;
+  line-height: 1.3em;
+  color: rgb(102, 102, 102);
+  line-height: 1.3em;
+  margin-top: 1px;
+  margin-right: 0px;
+}
+
+#posicionp2{
+  position: relative;
+  height: auto;
+  padding-top: 0px;
+  padding-bottom: 70px;
+}
+
+#sidos{
+  position: fixed;
+  left: 9px;
+  margin: 0px !important;
+  color:#66577a;
+  font-weight: bold;
+}
+
+#botonenviar1{
+  width: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 8px;
+  //border-radius: 10px !important;
+}
