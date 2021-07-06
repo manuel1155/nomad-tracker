@@ -1,7 +1,14 @@
-.map {
-    height: 400px;
-    width: 100%;
-  }
+.spinner-center{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-spinner {
+  transform: scale(3);
+}
 
   .form-content{
     --padding-bottom: 16px;
@@ -17,47 +24,37 @@ ion-list ion-item{
   
 }
 
-.principal{
-  background-color: #553781 !important;
-  border-radius: 10px;
-  width: auto;
-  margin-top: 15px !important;
-  margin-bottom: 15px;
+.sqare_button {
+  height: 120px;
+  --vertical-align: middle;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --ripple-color: darkcyan;
+  --padding-bottom: 2px !important;
+  --box-shadow: none;
+}
+.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 30px;
 }
 
-.pregunta{
-  padding-top: 15px;
-  color:#45403F;
+#listadesintomas{
+  font-size: 90%;
+  color: rgb(102, 102, 102);
+  font-style: italic;
 }
 
-.pregunta2{
-    font-size: medium;
-    line-height: 1.3em;
-    color: rgb(102, 102, 102);
-    line-height: 1.3em;
-    margin-top: 1px;
-    margin-right: 0px;
-  }
+.alert-radio-label.sc-ion-alert-md {
+  padding-left: 52px;
+  padding-right: 26px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  flex: 1;
+  color: var(--ion-color-step-850, #262626);
+  font-size: 14px;
+  text-overflow: Ellipsis;
+  white-space: pre-line;
+}
 
-  #posicionp2{
-    position: relative;
-    height: auto;
-    padding-top: 0px;
-    padding-bottom: 70px;
-  }
-  
-  #sidos{
-    position: fixed;
-    left: 9px;
-    margin: 0px !important;
-    color:#66577a;
-    font-weight: bold;
-  }
-
-#botonenviar1{
-    width: auto;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 8px;
-    //border-radius: 10px !important;
-  }

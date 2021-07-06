@@ -3,92 +3,232 @@
     <ion-buttons slot="start" id="headerPrincipal">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title id="bienvenida1">Crear visita</ion-title>
+    <ion-title id="bienvenida1">Registrar visita</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="form-content content-f1">
 
-  <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);" *ngIf="step==1">
-    <ion-item>
-      <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
-    </ion-item>
-    <ion-item>
-      <div #mapElement class="map"></div>
-    </ion-item>
-    <ion-item>
-      <ion-label class="ion-text-wrap pregunta"> <b>Dirección Google Maps: </b></ion-label>
-      <span>{{ direccion }}</span>
-    </ion-item>
-
-    <form [formGroup]="DataVisita">
-      <ion-item>
-        <ion-label position="floating">Comentarios: </ion-label>
-        <ion-textarea rows="3" formControlName="comentarios" placeholder="Comentarios de la visita..."></ion-textarea>
-      </ion-item>
-      <ion-item>
-        <ion-list style="width: 100%;" id="posicionp2" class="list-preg">
-          <ion-radio-group formControlName="opcion_visita">
-            <ion-list-header id="tarjetapregunta2">
-              <ion-label class="ion-text-wrap pregunta pregunta2">
-                <b>Selecciona una opción: </b>
-              </ion-label>
-            </ion-list-header>
-            <ion-item>
-              <ion-radio value="terminar"></ion-radio>
-              <ion-label>Terminar visita</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-radio value="asignar"></ion-radio>
-              <ion-label>Asignar cliente</ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-radio value="seguimiento"></ion-radio>
-              <ion-label>Registrar seguimiento</ion-label>
-            </ion-item>
-          </ion-radio-group>
-        </ion-list>
-      </ion-item>
-    </form>
-
-    <section>
-      <ion-button color="warning" [disabled]="!DataVisita.valid" *ngIf="f.opcion_visita.value=='terminar'"
-        (click)="nextStep()">Terminar
-        visita</ion-button>
-      <ion-button color="secondary" [disabled]="!DataVisita.valid"
-        *ngIf="f.opcion_visita.value=='seguimiento' || f.opcion_visita.value=='asignar'" (click)="nextStep()">Siguiente
-      </ion-button>
-    </section>
-
-  </ion-list>
-
-  <div *ngIf="step==2">
-    <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
-      <ion-item>
-        <ion-label class="ion-text-wrap pregunta"> <b>Asignar Cliente</b></ion-label>
-      </ion-item>
-    </ion-list>
-    <app-clientes-tab [origen]="'visita'" (selectCli)="verCliente($event)"></app-clientes-tab>
-    <ion-list lines="none" *ngIf="detCli" style="background: rgb(252, 255, 252, 0.4);">
-      <ion-item>
-        <ion-label class="ion-text-wrap"> <b>Nombre Cliente:</b></ion-label>
-         <span><b>{{ detCli.nombre_cli }}</b></span>
-      </ion-item>
-    </ion-list>
-
-    <section class="ion-text-center" >
-      <ion-button color="success" [disabled]="detCli == null" (click)="nextStep()" >
-        Siguiente  <ion-icon name="checkmark-circle"></ion-icon>
-      </ion-button>
-    </section>
-
-
+  <div class="spin spinner-center" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
   </div>
 
-  <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);" *ngIf="step==3">
-    <ion-item>
-      <ion-label class="ion-text-wrap pregunta"> <b>Programar seguimiento</b></ion-label>
-    </ion-item>
-  </ion-list>
+  <div *ngIf="done">
 
+    <div *ngIf="step==1">
+      <h1>Selecciona una opción</h1>
+      <br>
+      <ion-button (click)="cambioStep(1,'existente')" fill="solid" expand="block" size="large" class="sqare_button">
+        <div class="vertical">
+          <span class="">Obra existente</span>
+          <ion-icon slot="start" name="star"></ion-icon>
+        </div>
+      </ion-button>
+      <br>
+      <ion-button (click)="cambioStep(1,'nueva')" fill="solid" expand="block" size="large" class="sqare_button">
+        <div class="vertical">
+          <span class="">Obra nueva</span>
+          <ion-icon slot="start" name="add-circle"></ion-icon>
+        </div>
+      </ion-button>
+    </div>
+
+    <div *ngIf="step==2">
+      <h1>Obra Existente</h1>
+      <h3>Elige una Obra de la sigueinte lista</h3>
+      <app-obras-tab #tabObras (selectObra)="verObra($event)" [origen]="'visita'"></app-obras-tab>
+
+      <ion-list *ngIf="currentObra">
+        <ion-item class="rounded">
+          <div>
+            <br>
+            <p> <b>Obra Seleccionada: </b></p>
+            <p> {{ currentObra.nombre_obra }}</p>
+            <p> <b>Cliente: </b></p>
+            <p> {{ currentObra.nombreCli }}</p>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <section>
+        <ion-button [disabled]="!currentObra" (click)="cambioStep(2)">
+          Siguiente <ion-icon name="arrow-forward-circle"></ion-icon>
+        </ion-button>
+      </section>
+
+    </div>
+
+    <div *ngIf="step==3">
+      <h1>Datos de la visita</h1>
+
+      <ion-list *ngIf="tipoObra=='existente'">
+        <ion-item class="rounded">
+          <div>
+            <br>
+            <p> <b>Obra Seleccionada: </b></p>
+            <p> {{ currentObra.nombre_obra }}</p>
+            <p> <b>Cliente: </b></p>
+            <p> {{ currentObra.nombreCli }}</p>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="tipoObra=='nueva'">
+        <ion-item class="rounded">
+          <div>
+            <br>
+            <p> <b>Obra Nueva: </b></p>
+            <p> {{ formObra.controls['nombre_obra'].value }}</p>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <ion-list>
+        <ion-item>
+          <ion-textarea class="rounded" rows="3" placeholder="Comentarios de la visita..."
+            [(ngModel)]="comenttariosVisita">
+          </ion-textarea>
+        </ion-item>
+        <ion-item id="listadesintomas">
+          <ion-label class="ion-text-wrap">¿Requiere seguimiento?</ion-label>
+          <ion-toggle [(ngModel)]="seguimiento" (ionChange)="cambioToggle($event)"></ion-toggle>
+        </ion-item>
+
+        <div *ngIf="seguimiento">
+          <ion-item>
+            <ion-datetime placeholder="Selecciona la fecha" [min]="today" [max]="maxDate"
+              monthShortNames="Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre"
+              [(ngModel)]="f_seguimiento" displayFormat="MMM DD, YYYY">
+            </ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-datetime placeholder="Selecciona la hora" [(ngModel)]="h_seguimiento" displayFormat="hh-mm-A">
+            </ion-datetime>
+          </ion-item>
+        </div>
+
+        <div *ngIf="!seguimiento">
+          <ion-radio-group [(ngModel)]="estatusObra">
+            <ion-list-header>
+              <ion-label>Definir estatus de obra</ion-label>
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Terminada</ion-label>
+              <ion-radio slot="start" value="terminada"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Inactiva</ion-label>
+              <ion-radio slot="start" value="inactiva"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Otro proveedor</ion-label>
+              <ion-radio slot="start" value="otro proveedor"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </div>
+
+
+        <section>
+          <ion-button (click)="backStep()">
+            <ion-icon name="arrow-back-circle"></ion-icon> Regresar  
+          </ion-button>
+          <ion-button color="success" [disabled]="!validaExistente()" *ngIf="tipoObra=='existente'" (click)="guardarVisita()">
+            Guardar <ion-icon name="checkmark-circle"></ion-icon>
+          </ion-button>
+          <ion-button color="success" [disabled]="!validaNueva()" *ngIf="tipoObra=='nueva'" (click)="guardarVisita()">
+            Guardar <ion-icon name="checkmark-circle"></ion-icon>
+          </ion-button>
+        </section>
+
+
+      </ion-list>
+    </div>
+
+    <form [formGroup]="formObra">
+      <div *ngIf="step==4">
+        <h1>Ubicación de la obra</h1>
+        <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
+          <ion-item-sliding>
+            <agm-map [style.height.px]="height" [zoom]="zoom" [latitude]="lat" [longitude]="lng">
+              <agm-marker *ngFor="let marker of listaObras" [iconUrl]=" iconData" [latitude]="marker.lat_obra"
+                [longitude]="marker.lon_obra" [markerDraggable]="false">
+                <agm-info-window #infoWindow>
+                  <strong>Obra:</strong> {{ marker.nombre_obra }} <br>
+                  <strong>Vendedor:</strong> {{ marker.idVendedor }} .- {{ marker.vendedorName }} <br>
+                  <strong>estatus:</strong> {{ marker.estatus }}
+                </agm-info-window>
+              </agm-marker>
+              <agm-marker [markerDraggable]="true" [zIndex]="10" [latitude]="lat" [longitude]="lng" (dragEnd)="markerDragEnd($event)">
+              </agm-marker>
+            </agm-map>
+          </ion-item-sliding>
+          <ion-item class="rounded">
+            <div>
+              <br>
+              <p> <b>Dirección Google Maps: </b></p>
+              <p> {{ direccion }}</p>
+            </div>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Confirmar dirección: </ion-label>
+            <ion-textarea class="rounded" rows="3" formControlName="direccion_vendedor"
+              placeholder="Dirección de la obra...">
+            </ion-textarea>
+          </ion-item>
+        </ion-list>
+
+        <section>
+          <ion-button (click)="cambioStep(4)">
+            Siguiente <ion-icon name="arrow-forward-circle"></ion-icon>
+          </ion-button>
+        </section>
+
+      </div>
+
+
+
+      <div *ngIf="step==5">
+        <ion-list>
+          <ion-item>
+            <ion-label position="floating">Nombre de obra: </ion-label>
+            <ion-input class="rounded" formControlName="nombre_obra" placeholder="Nombre de la obra"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Tipo obra: </ion-label>
+            <ion-input class="rounded" formControlName="tipo_obra" placeholder="Tipo de obra"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Responsable obra: </ion-label>
+            <ion-input class="rounded" formControlName="resp_obra" placeholder="Responsable de la obra"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Contacto responasable: </ion-label>
+            <ion-input class="rounded" type="tel" formControlName="cont_resp" placeholder="000-000-0000"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Comentarios:</ion-label>
+            <ion-textarea class="rounded" rows="3" formControlName="comentarios" placeholder="Dirección de la obra...">
+            </ion-textarea>
+          </ion-item>
+
+        </ion-list>
+
+        <section class="ion-text-center">
+          <ion-button (click)="backStep()">
+            <ion-icon name="arrow-back-circle"></ion-icon> Regresar  
+          </ion-button>
+          <ion-button color="success" [disabled]="!formObra.valid" (click)="cambioStep(5)">
+            Siguiente <ion-icon name="arrow-forward-circle"></ion-icon>
+          </ion-button>
+        </section>
+      </div>
+
+    </form>
+
+  </div>
 </ion-content>

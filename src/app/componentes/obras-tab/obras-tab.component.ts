@@ -37,6 +37,7 @@ export class ObrasTabComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.getDataObras();
+    console.log(this.origen)
   }
 
   ngOnDestroy(): void {
@@ -55,6 +56,7 @@ export class ObrasTabComponent implements OnInit,OnDestroy {
           if(this.detCliente){
             this.subscription = this.obrasService.getListObrasCli(this.detCliente.id).subscribe(data => {
               this.dataObras = data;
+              
               this.dataObras.sort(function (a, b) {
                 return new Date(b.f_creado.seconds * 1000).getTime() - new Date(a.f_creado.seconds * 1000).getTime();
               });
@@ -63,8 +65,17 @@ export class ObrasTabComponent implements OnInit,OnDestroy {
               resolve();
             })
           }else{
-            this.obrasService.getListObrasAll().subscribe(data => {
+            this.obrasService.getListObrasAll().subscribe(async data => {
               this.dataObras = data;
+              /*for(let obra of this.dataObras){
+                await new Promise<void> ((resolve)=>{
+                  this.obrasService.updateObra({id: obra.id, idSistema: obra.idSistema, idVendedor:1,vendedorName:'Manuel Esquivel'}).then((data)=>{
+                    console.log(data['idSistema'])
+                    resolve()
+                  })
+
+                })
+              }*/
               this.dataObras.sort(function (a, b) {
                 return new Date(b.f_creado.seconds * 1000).getTime() - new Date(a.f_creado.seconds * 1000).getTime();
               });
@@ -106,4 +117,12 @@ export class ObrasTabComponent implements OnInit,OnDestroy {
     };
     this.router.navigate(['/add-obra-mod'], navigationExtras);
   }
+
+  changeSelectObra(post:any){
+    console.log(post);
+    let detObra = post;
+
+    this.selectObra.emit({ detObra: detObra });
+  }
+
 }

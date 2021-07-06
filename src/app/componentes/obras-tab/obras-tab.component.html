@@ -27,6 +27,19 @@
         <b>Responsable</b>
       </ng-template>
     </ngx-datatable-column>
+    <ngx-datatable-column prop="nombreCli" [sortable]="true" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Cliente</b>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="vendedorName" [sortable]="true" [cellClass]="'cell-datatable'">
+      <ng-template ngx-datatable-header-template>
+        <b>Vendedor</b>
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        {{ row.currentVendedor }} .- {{ row.vendedorName }}
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column prop="f_creado" [sortable]="true" [cellClass]="'cell-datatable'">
       <ng-template ngx-datatable-header-template>
         <b>F Creado</b>
@@ -49,7 +62,7 @@
           <ion-button color="primary" *ngIf="origen=='obra'" style="border-radius: 10px;" (click)="goToEditObra(row)">
             <ion-icon name="create"></ion-icon>
           </ion-button>
-          <ion-button color="success" *ngIf="origen=='visita'" style="border-radius: 10px;" (click)="selectCliente(row)">
+          <ion-button color="success" *ngIf="origen=='visita'" style="border-radius: 10px;" (click)="changeSelectObra(row)">
             <ion-icon name="checkmark-circle"></ion-icon>
           </ion-button>
           
@@ -57,10 +70,4 @@
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>
-
-  <section *ngIf="origen=='visita'" >
-    <ion-button (click)="addClienteModal()">
-      Nuevo<ion-icon name="add-circle"></ion-icon>
-    </ion-button>
-  </section>
 </div>

@@ -23,14 +23,17 @@ export class ObrasService {
     post['f_termiado'] = '';
 
     console.log(post);
-    await new Promise<void>((resolve) => {
-      this.afs.doc('smaug/totalconcretos/clientes_cambaceo/' + post['idCli']).valueChanges().pipe(take(1)).subscribe(cli=>{
-        let obras=cli['obras']+1;
-        this.afs.doc('smaug/totalconcretos/clientes_cambaceo/' + post['idCli']).update({obras:obras}).then(()=>{
-          resolve();
+    
+    if(post['idCli']){
+      await new Promise<void>((resolve) => {
+        this.afs.doc('smaug/totalconcretos/clientes_cambaceo/' + post['idCli']).valueChanges().pipe(take(1)).subscribe(cli=>{
+          let obras=cli['obras']+1;
+          this.afs.doc('smaug/totalconcretos/clientes_cambaceo/' + post['idCli']).update({obras:obras}).then(()=>{
+            resolve();
+          })
         })
-      })
-    });
+      });
+    }    
 
     return new Promise((resolve) => {
       post['idSistema'] = post['id'].substring(0, 6).toUpperCase();

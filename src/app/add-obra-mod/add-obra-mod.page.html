@@ -5,7 +5,8 @@
         Cancelar
       </ion-button>
     </ion-buttons>
-    <ion-title id="bienvenida1">Crear Obra</ion-title>
+    <ion-title id="bienvenida1" *ngIf="!currentObra">Crear Obra</ion-title>
+    <ion-title id="bienvenida1" *ngIf="currentObra">Editar obra</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -29,7 +30,7 @@
             [markerDraggable]="false">
             <agm-info-window #infoWindow>
               <strong>Obra:</strong> {{ marker.nombre_obra }} <br>
-              <strong>Vendedor:</strong> {{ marker.vendedor_name }} <br>
+              <strong>Vendedor:</strong> {{ marker.idVendedor }} .- {{ marker.vendedorName }} <br>
               <strong>estatus:</strong> {{ marker.estatus }}
             </agm-info-window>
           </agm-marker>

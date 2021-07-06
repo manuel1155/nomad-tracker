@@ -52,7 +52,6 @@ export class AddObraModPage implements OnInit {
     private auth: AuthService,
     private obrasServ: ObrasService
   ) {
-    console.log(platform.height());
     this.height = platform.height() - 350;
 
     this.formObra = this.fb.group({
@@ -288,7 +287,6 @@ export class AddObraModPage implements OnInit {
       post['f_modificado'] = new Date();
       post['idSistema'] = this.currentObra.idSistema;
       post['id'] = this.currentObra.id;
-      post['user_reg'] = this.auth.currentUserId;
       post['lat_obra'] = this.lat;
       post['lon_obra'] = this.lng;
       post['ubic_obra'] = new firebase.firestore.GeoPoint(this.lat, this.lng)
@@ -309,12 +307,15 @@ export class AddObraModPage implements OnInit {
     else {
       console.log('crea obra')
       post['user_reg'] = this.auth.currentUserId;
+      post['vendedorName'] = this.auth.dataUser['displayName'];
       post['lat_obra'] = this.lat;
       post['lon_obra'] = this.lng;
       post['ubic_obra'] = new firebase.firestore.GeoPoint(this.lat, this.lng)
       post['direccion_google'] = this.direccion;
       post['estatus'] = 'activa';
       post['idCli'] = this.currentCli.id;
+      post['nombreCli'] = this.currentCli.nombre_cli;
+      post['currentVendedor'] = this.auth.dataUser['idNumerico'];
 
       this.obrasServ.createObra(post).then((data) => {
         Swal.close();
