@@ -6,15 +6,24 @@
   <div *ngIf="done">
     <ion-input type="text" #Filtro1  placeholder="Filtro por nombre..."  (keyup)="updateFilter($event)"></ion-input>
     <br>
-    <ngx-datatable style="width: 100%;" class="material" [limit]="8" [rows]="rows" [rowHeight]="'auto'"
+    <ngx-datatable style="width: 100%; height: 75vh;" [scrollbarV]="true" class="material" [limit]="8" [rows]="rows" [rowHeight]="60"
       [scrollbarH]="true" [columnMode]="'force'" [sortType]="'multi'" [headerHeight]="50" [footerHeight]="50"
-      [limit]="4">
+      [limit]="15">
 
-      <ngx-datatable-column name="idSistema" [cellClass]="'cell-datatable'">
+      <ngx-datatable-column name="acciones" [cellClass]="'cell-datatable'" *ngIf="origen=='visita'">
         <ng-template ngx-datatable-header-template>
-          <b>ID</b>
+          <b>Seleccionar Cliente</b>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <div>
+            <ion-button color="success" *ngIf="origen=='visita'" style="border-radius: 10px;" (click)="selectCliente(row)">
+              <ion-icon name="checkmark-circle"></ion-icon>
+            </ion-button>
+            
+          </div>
         </ng-template>
       </ngx-datatable-column>
+
       <ngx-datatable-column prop="nombre_cli" [cellClass]="'cell-datatable'">
         <ng-template ngx-datatable-header-template>
           <b>Nombre</b>
@@ -41,7 +50,7 @@
           <b>Obras</b>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="acciones" [cellClass]="'cell-datatable'">
+      <ngx-datatable-column name="acciones" [cellClass]="'cell-datatable'" *ngIf="origen=='cliente'">
         <ng-template ngx-datatable-header-template>
           <b>Acciones</b>
         </ng-template>
@@ -52,20 +61,9 @@
             </ion-button>
             <ion-button color="primary" *ngIf="origen=='cliente'" style="border-radius: 10px;" (click)="goToObras(row)">
               <img src="assets/icon/build.png" width="20">
-            </ion-button>
-
-            <ion-button color="success" *ngIf="origen=='visita'" style="border-radius: 10px;" (click)="selectCliente(row)">
-              <ion-icon name="checkmark-circle"></ion-icon>
-            </ion-button>
-            
+            </ion-button>    
           </div>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
-
-    <section *ngIf="origen=='visita'" >
-      <ion-button (click)="addClienteModal()">
-        Nuevo<ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </section>
   </div>

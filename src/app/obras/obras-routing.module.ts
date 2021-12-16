@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ObrasPage
+  },
+  {
+    path: 'mod-sel-cli',
+    loadChildren: () => import('./mod-sel-cli/mod-sel-cli.module').then( m => m.ModSelCliPageModule)
   }
 ];
 

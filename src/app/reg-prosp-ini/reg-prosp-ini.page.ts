@@ -112,14 +112,10 @@ export class RegProspIniPage implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe(async params => {
-      console.log(this.router.getCurrentNavigation().extras);
-      console.log(this.router.getCurrentNavigation().extras.state);
       if (this.router.getCurrentNavigation().extras.state) {
-        console.log('con parametros')
         this.currentProsp = this.router.getCurrentNavigation().extras.state.prosp;
         this.loadProspData();
       } else {
-        console.log('sin parametros')
         this.initFormNew();
         this.currentProsp = null;
       }
@@ -135,7 +131,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
       if (user !== null) {
         this.auth.currentUser = user;
         await this.auth.getUserData();
-        console.log(this.auth.dataUser);
         if (this.auth.dataUser['areaTrabajo']) {
           if (this.auth.dataUser['areaTrabajo']['colonia'] != '' && this.auth.dataUser['areaTrabajo']['cp'] != '') {
             let calleLS = '';
@@ -162,7 +157,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
         this.DataProspForm.controls['comentarios'].clearValidators();
         await this.checkGPSPermission();
         this.done = true;
-        console.log('done')
 
         this.dataTrabajo = true;
         this.onChanges();
@@ -225,8 +219,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
     for (let prod of this.currentProsp['prod_int']) {
       this.prod_int.filter(p => p.val == prod)[0]['isChecked'] = true;
     }
-
-    console.log(this.currentProsp);
 
     this.arrayImagenes = this.currentProsp['arrayImg'];
     this.dataTrabajo = true;
@@ -325,7 +317,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
       showConfirmButton: false,
     
     });
-    console.log(this.currentProsp)
 
     let post = this.DataProspForm.value;
     let estatus = 'terminado';
@@ -334,16 +325,13 @@ export class RegProspIniPage implements OnInit, OnDestroy {
     let arrayProsInt = [];
 
     if (this.currentProsp) {
-      console.log('actualización de prospecto')
       id = this.currentProsp.id;
       post['user_mod'] = this.auth.currentUserId;
       post['f_modificado'] = new Date();
       post['idSistema']=this.currentProsp.idSistema;
       post['id'] = id;
     } else {
-      console.log('registro nuevo de prospecto');
       id = this.afs.createId();
-      console.log('este es el id:  ' + id);
 
       post['colonia'] = this.auth.dataUser['areaTrabajo']['colonia'];
       post['cp'] = this.auth.dataUser['areaTrabajo']['cp'];
@@ -371,15 +359,14 @@ export class RegProspIniPage implements OnInit, OnDestroy {
 
     if (post['contacto'] && post['interes']) {
       let tempImgs = this.arrayImagenes.filter(img => img.take == true && img.upload == false);
-      console.log(tempImgs)
+
       if (tempImgs.length > 0) {
         for (let img of tempImgs) {
           img.url = await this.upload(img.url, img.id, post['id']);
           img.upload = true;
         }
       }
-      console.log(this.arrayImagenes);
-      console.log(this.arrayImagenes.filter(img => img.upload).length);
+
       if (this.arrayImagenes.filter(img => img.upload).length == this.arrayImagenes.length) estatus = 'creado';
       else estatus = 'incompleto';
     }
@@ -392,11 +379,8 @@ export class RegProspIniPage implements OnInit, OnDestroy {
     post['arrayImg'] = this.arrayImagenes;
     post['prod_int'] = arrayProsInt;
     post['estatus'] = estatus;
-
-    console.log(post);
     
     if(this.currentProsp){
-      console.log('funcion de actualizar')
       this.prospService.updateProsp(post).then((data) => {
         Swal.close();
         localStorage.setItem('calle', post['calle']);
@@ -410,7 +394,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
         });
       });
     }else{
-      console.log('funcion de crear')
       this.prospService.createProspecto(post).then((data) => {
         Swal.close();
         localStorage.setItem('calle', post['calle']);
@@ -427,28 +410,23 @@ export class RegProspIniPage implements OnInit, OnDestroy {
   }
 
   checkGPSPermission() {
-    console.log('Checando los permisos de la APP');
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
       result => {
         if (result.hasPermission) {
-          console.log('app CON permisos');
           //If having permission show 'Turn On GPS' dialogue
           this.askToTurnOnGPS();
         } else {
-          console.log('app SIN permisos');
           //If not having permission ask for permission
           this.requestGPSPermission();
         }
       },
       err => {
-        console.log('error de librerias')
         alert(err);
       }
     );
   }
 
   requestGPSPermission() {
-    console.log('solicitar permisos de al usuario');
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         console.log("4");
@@ -458,12 +436,10 @@ export class RegProspIniPage implements OnInit, OnDestroy {
           .then(
             () => {
               // call method to turn on GPS
-              console.log('usuario otorga permisos a la APP');
               this.askToTurnOnGPS();
             },
             error => {
               //Show alert if user click on 'No Thanks'
-              console.log('usuario niega permisos a la APP');
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -481,12 +457,10 @@ export class RegProspIniPage implements OnInit, OnDestroy {
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
       () => {
-        console.log('usuario activa el GPS');
         // When GPS Turned ON call method to get Accurate location coordinates
         this.getGeolocation()
       },
       error => {
-        console.log('Usuario no activa el GPS');
         alert('Error requesting location permissions ' + JSON.stringify(error))
         Swal.fire({
           icon: 'error',
@@ -501,16 +475,13 @@ export class RegProspIniPage implements OnInit, OnDestroy {
   }
 
   getGeolocation() {
-    console.log('getGeolocalizacion')
     return new Promise((resolve, reject) => {
 
       this.options = {
         maximumAge: 3000,
         enableHighAccuracy: true
       };
-      console.log('opciones config');
       this.geolocation.getCurrentPosition(this.options).then((pos: Geoposition) => {
-        console.log(pos)
         this.currentPos = pos;
         this.lat = pos.coords.latitude;
         this.lon = pos.coords.longitude;
@@ -521,17 +492,14 @@ export class RegProspIniPage implements OnInit, OnDestroy {
           time: new Date(),
         };
         this.bandGeoPos = true;
-        console.log('loc', location);
         resolve(pos);
       }, (err: PositionError) => {
-        console.log("error : " + err.message);
         reject(err.message);
       });
     });
   }
 
   getCamara(origen: string) {
-    console.log(origen)
     const cameraOptions: CameraOptions = {
       quality: 80,
       destinationType: Camera.DestinationType.DATA_URL,
@@ -549,7 +517,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
         this.arrayImagenes.filter(img => img.id == origen)[0]['url'] = 'data:image/jpeg;base64,' + imageData;
         this.arrayImagenes.filter(img => img.id == origen)[0]['take'] = true;
         this.arrayImagenes.filter(img => img.id == origen)[0]['upload'] = false;
-        console.log(this.arrayImagenes);
       }, (err) => {
 
       });
@@ -572,7 +539,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
         this.arrayImagenes.filter(img => img.id == origen)[0]['url'] = 'data:image/jpeg;base64,' + imageData;
         this.arrayImagenes.filter(img => img.id == origen)[0]['take'] = true;
         this.arrayImagenes.filter(img => img.id == origen)[0]['upload'] = false;
-        console.log(this.arrayImagenes);
       }, (err) => {
 
       });
@@ -590,8 +556,6 @@ export class RegProspIniPage implements OnInit, OnDestroy {
 
       imageRef.putString(imgBase64, firebase.storage.StringFormat.DATA_URL)
         .then((snapshot) => {
-          console.log(snapshot);
-          console.log(snapshot.ref.fullPath);
           resolve(snapshot.ref.fullPath);
         });
     })

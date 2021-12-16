@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { AuthService } from "./../servicios/auth/auth.service";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { MenuController} from '@ionic/angular';
 
 @Component({

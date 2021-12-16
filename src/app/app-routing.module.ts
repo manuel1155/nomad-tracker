@@ -54,7 +54,19 @@ const routes: Routes = [
   {
     path: 'add-obra-mod',
     loadChildren: () => import('./add-obra-mod/add-obra-mod.module').then( m => m.AddObraModPageModule)
+  },  {
+    path: 'calendario',
+    loadChildren: () => import('./calendario/calendario.module').then( m => m.CalendarioPageModule)
   },
+  {
+    path: 'calendario-colados',
+    loadChildren: () => import('./calendario-colados/calendario-colados.module').then( m => m.CalendarioColadosPageModule)
+  },
+  {
+    path: 'checador',
+    loadChildren: () => import('./checador/checador.module').then( m => m.ChecadorPageModule)
+  },
+
 ];
 
 @NgModule({

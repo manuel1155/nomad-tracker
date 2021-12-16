@@ -34,22 +34,14 @@
 
 ion-split-pane{ 
     --border: none !important;
-    ion-menu{
-     --background: var(--ion-color-medium) !important; 
-        ion-content{            
-            --background: var(--ion-color-medium) !important; 
-            ion-list-header{ 
-                --background: var(--ion-color-medium) !important;
-                --color: #FFFFFF !important;   
-            }
-            ion-item{
-                --background: var(--ion-color-medium) !important;
-                 --color: #FFFFFF !important;
-                 ion-icon{ 
-                     padding-right: 10px !important;
-                    --color: #FFFFFF !important;
-                 }
-            }
-        }
-    }
 }
+
+.cal-modal {
+    --height: 80%;
+    --border-radius: 10px;
+    padding: 25px;
+}
+
+#headerPrincipal {
+    color: #fde26d !important;
+  }

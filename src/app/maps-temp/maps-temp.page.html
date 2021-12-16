@@ -1,10 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>mapsTemp</ion-title>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1">Ubicaciones de Obras</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content [fullscreen]="true" class="form-content content-f1">
 
   <div class="spin spinner-center" *ngIf="!done">
     <ion-spinner name="bubbles"></ion-spinner>
@@ -13,24 +16,49 @@
   <div *ngIf="done">
     <ion-list lines="none" style="background: rgb(252, 255, 252, 0.4);">
       <ion-item>
-        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
+        <ion-input type="text" #Filtro1  placeholder="Filtro por nombre..." [ngModel]="textFilter"  (ngModelChange)="updateFilter($event)"></ion-input>
+        <ion-buttons slot="end">
+          <ion-button (click)="openNewObra()">
+            <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item style="font-size: x-small;">
+        <ion-label>Mostrar obras:</ion-label>
+        <ion-select placeholder="Selecciona una opción" [(ngModel)]="filtro1" (ngModelChange)="updateFilter()" >
+          <ion-select-option value="Todas">Todas</ion-select-option>
+          <ion-select-option value="Propias">Propias</ion-select-option>
+        </ion-select>
       </ion-item>
       <ion-item-sliding>
         <agm-map [style.height.px]="height" [zoom]="zoom" [latitude]="lat" [longitude]="lng">
-          <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+          <agm-marker *ngFor="let marker of listaObras" [iconUrl]="marker.iconData" [latitude]="marker.lat_obra"
+            [longitude]="marker.lon_obra" [markerDraggable]="false">
+            <agm-info-window #infoWindow>
+              <strong>Obra:</strong> {{ marker.nombre_obra }} <br>
+              <strong>Vendedor:</strong> {{ marker.currentVendedor }} .- {{ marker.vendedorName }} <br>
+              <strong>estatus:</strong> {{ marker.estatus }}
+              <span *ngIf="marker.currentVendedor === auth.dataUser['idNumerico']">
+                <ion-buttons slot="end">
+                  <ion-button (click)="openMap(marker)">
+                    <ion-icon slot="icon-only" name="map"></ion-icon>
+                  </ion-button>
+                  <ion-button *ngIf="marker.estatus=='activa'" (click)="regVisita(marker)">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                  </ion-button>
+                  <ion-button *ngIf="marker.estatus=='seguimiento'" (click)="regSeguimiento(marker)">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </span>
+            </agm-info-window>
+          </agm-marker>
+
+          <agm-marker [zIndex]="10" [latitude]="lat2" [longitude]="lng2" [iconUrl]=" iconData2">
+          </agm-marker>
+
         </agm-map>
       </ion-item-sliding>
-      <ion-item>
-        <h5>Address: {{address}}</h5>
-  <div>Latitude: {{lat}}</div>
-  <div>Longitude: {{lng}}</div>
-      </ion-item>
-      <ion-item>
-        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label class="ion-text-wrap pregunta"> <b>Ubicación de la obra: </b></ion-label>
-      </ion-item>
     </ion-list>
   </div>
 </ion-content>

@@ -35,49 +35,7 @@ export class AuthService {
       }
     })
 
-    /*
-    this.afAuth.onAuthStateChanged(async (user) => {
-      console.log(user);
-      if (user) {
-        // User is signed in.
-        this.currentUser = user;
-        let userInfo={
-          uid:user.uid,
-          email:user.email
-        }
-        localStorage.setItem('user', JSON.stringify(userInfo));
-        JSON.parse(localStorage.getItem('user'));
-        await this.getUserData();
-      } else {
-        // No user is signed in.
-        localStorage.setItem('user', null);
-        JSON.parse(localStorage.getItem('user'));
-        this.currentUser = null;
-      }
-    });
-    // when using signInWithRedirect, this listens for the redirect results
-    this.afAuth.getRedirectResult()
-      .then((result) => {
-        // result.credential.accessToken gives you the Provider Access Token. You can use it to access the Provider API.
-        if (result.user) {
-          this.setProviderAdditionalInfo(result.additionalUserInfo.profile);
-          this.currentUser = result.user;
-          this.redirectResult.next(result);
-        }
-      }, (error) => {
-        this.redirectResult.next({ error: error.code });
-      });
-*/
   }
-/*
-  getRedirectResult(): Observable<any> {
-    return this.redirectResult.asObservable();
-  }
-
-  setProviderAdditionalInfo(additionalInfo: any) {
-    this.userProviderAdditionalInfo = { ...additionalInfo };
-  }
-*/
  
   async getUserData() {
     return new Promise(resolve => {

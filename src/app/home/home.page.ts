@@ -15,15 +15,16 @@ export class HomePage implements OnDestroy {
   constructor(private auth: AuthService,
     private menuCtrl: MenuController
   ) {
-    console.log('constructor');
+    
   }
+  
   ngOnDestroy(): void {
     this.subscriptios.unsubscribe();
   }
 
   async ngOnInit() {
+    
     this.subscriptios=this.auth.userDetails().subscribe(async user => {
-      console.log('user', user);
       if (user !== null) {
         this.auth.currentUser = user;
         await this.auth.getUserData();
@@ -35,7 +36,6 @@ export class HomePage implements OnDestroy {
           localStorage.setItem('dataUser', JSON.stringify(this.auth.dataUser));
         }
         else {
-          console.log('preguntar')
           this.menuCtrl.enable(true,'principal');
         }
       } else {

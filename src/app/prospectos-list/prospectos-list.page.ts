@@ -32,7 +32,6 @@ export class ProspectosListPage implements OnInit {
 
   ngOnInit() {
     //this.getDataProspectos();
-    console.log('on init');
   }
 
   updateFilter(event) {
@@ -50,7 +49,6 @@ export class ProspectosListPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    console.log('ionViewWillEnter');
     this.dataProspectos = [];
     this.getDataProspectos();
   }
@@ -67,7 +65,6 @@ export class ProspectosListPage implements OnInit {
 
         await new Promise<void>((resolve) => {
           this.prospService.getListProspectosDia(this.auth.currentUserId).subscribe(data => {
-            console.log(data);
             this.dataProspHoy = data;
             this.dataProspectos = [...this.dataProspAnt, ...this.dataProspHoy];
             this.dataProspectos.sort(function (a, b) {
@@ -80,7 +77,6 @@ export class ProspectosListPage implements OnInit {
 
         await new Promise<void>((resolve) => {
           this.prospService.getListProspectosInc(this.auth.currentUserId).subscribe(data => {
-            console.log(data);
             this.dataProspAnt = data;
             this.dataProspectos = [...this.dataProspAnt, ...this.dataProspHoy];
             this.dataProspectos.sort(function (a, b) {
@@ -104,7 +100,6 @@ export class ProspectosListPage implements OnInit {
         prosp: prosp
       }
     };
-    console.log(prosp);
     this.router.navigate(['/reg-prosp-ini'], navigationExtras);
   }
 

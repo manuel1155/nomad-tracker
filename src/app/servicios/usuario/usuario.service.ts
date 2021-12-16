@@ -31,10 +31,8 @@ export class UsuarioService {
     let id = this.afs.createId();
     post['id'] = id;
     return new Promise<void>(resolve => {
-      console.log('entra promise')
       this.afs.collection('app-covid').doc('selacademy').collection('usuarios').doc(post['id']).set(post).then(
         (success) => {
-          console.log(success)
           resolve()
         },
         (err) => console.warn(err)

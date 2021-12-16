@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -12,9 +15,15 @@ export class ObrasPage implements OnInit {
   currentCli: any = null;
   @ViewChild('tabObras', { static: false }) tabObras;
 
+  dataFiltros: any = null;
+  formFiltros: FormGroup;
+  textFilter: string = '';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private menu: MenuController,
+    private fb: FormBuilder,
   ) {
     if (this.router.getCurrentNavigation() != null) {
       this.route.queryParams.subscribe(async params => {
@@ -27,9 +36,58 @@ export class ObrasPage implements OnInit {
     } else {
       this.currentCli = null;
     }
+
+    this.formFiltros = this.fb.group({
+      obras: ['todas', Validators.required],
+      cliente: 'todos',
+      estatus: ''
+    });
   }
 
   ngOnInit() {
+
+    this.dataFiltros = new BehaviorSubject({
+      obras: 'todas',
+      textFilter: '',
+    });
+
+    this.onChangeFilter();
+
+  }
+
+  updateFilter(text) {
+    console.log(text);
+    this.textFilter=text;
+    console.log(this.textFilter)
+    let dataFiltros = this.formFiltros.value;
+    dataFiltros['textFilter'] = this.textFilter
+    this.dataFiltros.next(dataFiltros);
+  }
+
+  onChangeFilter() {
+    this.formFiltros.valueChanges.subscribe(data => {
+      let dataFiltros = data;
+      dataFiltros['textFilter'] = this.textFilter
+      this.dataFiltros.next(dataFiltros);
+    })
+  }
+
+  changeName() {
+
+    this.dataFiltros.next({
+      firstname: 'Foo',
+      lastname: 'Kooper'
+
+    });
+  }
+
+  openFiltros() {
+    this.menu.enable(true, 'filtros');
+    this.menu.open('filtros');
+  }
+
+  closeFiltros() {
+    this.menu.enable(false, 'filtros')
   }
 
   goToAddObra() {

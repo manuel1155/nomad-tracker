@@ -70,13 +70,9 @@ export class AddObraModPage implements OnInit {
     await new Promise<void>((resolve) => {
       if (this.router.getCurrentNavigation() != null) {
         this.route.queryParams.subscribe(async params => {
-          console.log(this.router);
           if (this.router.getCurrentNavigation().extras.state) {
-            console.log('con parametros')
             this.currentCli = this.router.getCurrentNavigation().extras.state.detCliente;
-            console.log(this.router.getCurrentNavigation().extras.state.detObra)
             if (this.router.getCurrentNavigation().extras.state.detObra) {
-              console.log('cargar ubicacion recibida');
               this.currentObra = this.router.getCurrentNavigation().extras.state.detObra;
               resolve();
             } else {
@@ -96,9 +92,6 @@ export class AddObraModPage implements OnInit {
         resolve();
       }
     })
-
-    console.log(this.currentCli);
-    console.log(this.currentObra);
     this.checkGPSPermission();
   }
 
@@ -117,7 +110,6 @@ export class AddObraModPage implements OnInit {
   }
 
   markerDragEnd($event: google.maps.MouseEvent) {
-    console.log($event.latLng.lat(), $event.latLng.lng());
     this.lat = $event.latLng.lat();
     this.lng = $event.latLng.lng();
     this.getAddress(this.lat, this.lng);
@@ -125,8 +117,7 @@ export class AddObraModPage implements OnInit {
 
   getAddress(latitude, longitude) {
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
+
       if (status === 'OK') {
         if (results[0]) {
           this.direccion = results[0].formatted_address;
@@ -157,8 +148,6 @@ export class AddObraModPage implements OnInit {
 
           this.zoom = 16;
           this.geoCoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, (results, status) => {
-            console.log(results);
-            console.log(status);
             if (status === 'OK') {
               if (results[0]) {
                 this.direccion = results[0].formatted_address;
@@ -171,7 +160,6 @@ export class AddObraModPage implements OnInit {
               window.alert('Geocoder failed due to: ' + status);
               resolve();
             }
-
           });
 
         });
@@ -180,28 +168,23 @@ export class AddObraModPage implements OnInit {
   }
 
   checkGPSPermission() {
-    console.log('Checando los permisos de la APP');
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
       result => {
         if (result.hasPermission) {
-          console.log('app CON permisos');
           //If having permission show 'Turn On GPS' dialogue
           this.askToTurnOnGPS();
         } else {
-          console.log('app SIN permisos');
           //If not having permission ask for permission
           this.requestGPSPermission();
         }
       },
       err => {
-        console.log('error de librerias')
         alert(err);
       }
     );
   }
 
   requestGPSPermission() {
-    console.log('solicitar permisos de al usuario');
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         console.log("4");
@@ -211,12 +194,10 @@ export class AddObraModPage implements OnInit {
           .then(
             () => {
               // call method to turn on GPS
-              console.log('usuario otorga permisos a la APP');
               this.askToTurnOnGPS();
             },
             error => {
               //Show alert if user click on 'No Thanks'
-              console.log('usuario niega permisos a la APP');
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -234,28 +215,36 @@ export class AddObraModPage implements OnInit {
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
       async () => {
-        console.log('usuario activa el GPS');
         // When GPS Turned ON call method to get Accurate location coordinates
         //this.getGeolocation()
         this.geoCoder = new google.maps.Geocoder;
-        this.obrasServ.getListObrasAll().subscribe(data => {
+        this.obrasServ.getListObrasAll().subscribe(async data => {
+          await new Promise<void>((resolve)=>{
+            for(let obra of data){
+              let urlMarker='';
+              if(obra.currentVendedor === this.auth.dataUser['idNumerico']) urlMarker="./../../assets/img/obra_propia.png";
+              else  urlMarker="./../../assets/img/obra_otros.png";
+              obra['iconData']={
+                url: urlMarker,
+                scaledSize: {
+                  width: 35,
+                  height: 35
+                }
+              }
+            }
+            resolve();
+          })
           this.listaObras = data;
         })
         await this.setCurrentLocation();
         if (this.currentObra) {
           this.loadObraData();
-          console.log(this.currentCli)
-          console.log(this.currentObra)
-          console.log('con datos de obra')
         } else {
-          console.log(this.currentCli)
-          console.log(this.currentObra)
-          console.log('sin datos')
+
         }
         this.done = true;
       },
       error => {
-        console.log('Usuario no activa el GPS');
         alert('Error requesting location permissions ' + JSON.stringify(error))
         Swal.fire({
           icon: 'error',
@@ -282,7 +271,6 @@ export class AddObraModPage implements OnInit {
     let post = this.formObra.value;
 
     if (this.currentObra) {
-      console.log('edit obra')
       post['user_mod'] = this.auth.currentUserId;
       post['f_modificado'] = new Date();
       post['idSistema'] = this.currentObra.idSistema;
@@ -305,7 +293,6 @@ export class AddObraModPage implements OnInit {
       });
     }
     else {
-      console.log('crea obra')
       post['user_reg'] = this.auth.currentUserId;
       post['vendedorName'] = this.auth.dataUser['displayName'];
       post['lat_obra'] = this.lat;
@@ -340,7 +327,6 @@ export class AddObraModPage implements OnInit {
   }
 
   goToObras() {
-    console.log(this.currentCli)
     let navigationExtras: NavigationExtras = {
       state: {
         detCli: this.currentCli,

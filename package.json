@@ -1,5 +1,5 @@
 {
-  "name": "APP-QR-COVID",
+  "name": "APP-TOTAL-CONCRETOS",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -26,6 +26,7 @@
     "@angular/router": "~9.1.6",
     "@ionic-native/android-permissions": "^5.33.0",
     "@ionic-native/barcode-scanner": "^5.26.0",
+    "@ionic-native/call-number": "^5.35.0",
     "@ionic-native/camera": "^5.32.0",
     "@ionic-native/core": "^5.33.0",
     "@ionic-native/geolocation": "^5.32.0",
@@ -39,6 +40,7 @@
     "cordova-android": "^8.1.0",
     "cordova-browser": "6.0.0",
     "firebase": "^7.14.6",
+    "ionic2-calendar": "^0.6.9",
     "phonegap-plugin-barcodescanner": "^8.1.0",
     "rxjs": "~6.5.1",
     "sweetalert2": "^9.14.4",
@@ -56,6 +58,7 @@
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
+    "call-number": "^1.0.1",
     "codelyzer": "^5.1.2",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.1.2",
@@ -103,7 +106,8 @@
       },
       "cordova-plugin-request-location-accuracy": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-nativegeocoder": {}
+      "cordova-plugin-nativegeocoder": {},
+      "mx.ferreyra.callnumber": {}
     },
     "platforms": [
       "android",

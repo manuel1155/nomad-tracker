@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ObrasPageRoutingModule } from './obras-routing.module';
 import { ObrasPage } from './obras.page';
@@ -14,7 +13,8 @@ import { ObrasTabComponent } from './../componentes/obras-tab/obras-tab.componen
     FormsModule,
     IonicModule,
     ObrasPageRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    ReactiveFormsModule
   ],
   declarations: [ObrasPage, ObrasTabComponent]
 })

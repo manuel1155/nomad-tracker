@@ -82,26 +82,11 @@ export class AddObraPage implements OnInit {
 
     this.direccion = this.currentObra.direccion_google;
 
-    /*********** */
-
-
-    console.log(this.currentObra);
-
     this.lat = this.currentObra.lat_obra;
     this.lon = this.currentObra.lon_obra;
 
-    console.log('Obra lat: ' + this.lat);
-    console.log('Obra lon: ' + this.lon);
-
     this.geoCoder = new google.maps.Geocoder();
-    /*this.map = new google.maps.Map(
-      this.mapElement.nativeElement,
-      {
-        center: { lat: this.lat, lng: this.lon },
-        zoom: 16
-      }
-    );*/
-    //this.getAddressFromCoords(this.lat, this.lon);
+    
     const position = new google.maps.LatLng(this.lat, this.lon);
     this.marker = new google.maps.Marker({
       position: position,
@@ -115,13 +100,9 @@ export class AddObraPage implements OnInit {
   ngOnInit() {
     if (this.router.getCurrentNavigation() != null) {
       this.route.queryParams.subscribe(async params => {
-        console.log(this.router);
         if (this.router.getCurrentNavigation().extras.state) {
-          console.log('con parametros')
           this.currentCli = this.router.getCurrentNavigation().extras.state.detCli;
-          console.log(this.router.getCurrentNavigation().extras.state.detObra)
           if (this.router.getCurrentNavigation().extras.state.detObra) {
-            console.log('cargar ubicacion recibida');
             this.currentObra = this.router.getCurrentNavigation().extras.state.detObra;
           } else {
             let resp: any;
@@ -157,20 +138,8 @@ export class AddObraPage implements OnInit {
                   } else {
                     resp = await this.askToTurnOnGPS();
                   }
-                  console.log(resp);
                   if (resp.success) {
-                    console.log(this.lat);
-                    console.log(this.lon);
-                    console.log('termina init');
 
-                    /*this.geoCoder = new google.maps.Geocoder();
-                    this.map = new google.maps.Map(
-                      this.mapElement.nativeElement,
-                      {
-                        center: { lat: this.lat, lng: this.lon },
-                        zoom: 16
-                      }
-                    );*/
                     this.getAddressFromCoords(this.lat, this.lon);
                     const position = new google.maps.LatLng(this.lat, this.lon);
                     this.marker = new google.maps.Marker({
@@ -187,28 +156,23 @@ export class AddObraPage implements OnInit {
 
           }
         } else {
-          console.log('sin parametros origen cliente')
           this.currentCli = null;
         }
       });
     } else {
-      console.log('sin parametros origen modal')
       this.currentCli = null;
     }
   }
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit')
     if (this.currentObra) {
       this.loadCliData();
-      console.log('con datos de obra')
     } else {
-      console.log('sin datos')
+
     }
   }
 
   onMapClicked($event) {
-    console.log($event);
     this.marker = {
       latitude: $event.coords.lat,
       longitude: $event.coords.lng,
@@ -301,8 +265,7 @@ export class AddObraPage implements OnInit {
                 text: 'Se requieren permisos de GPS para registrar a los prospectos',
 
               }).then(() => {
-                console.log('redireccionar')
-                //this.navCtrl.navigateBack('/prospectos-list');
+                
               })
             }
           );
@@ -311,7 +274,6 @@ export class AddObraPage implements OnInit {
   }
 
   goToObras() {
-    console.log(this.currentCli)
     let navigationExtras: NavigationExtras = {
       state: {
         detCli: this.currentCli,

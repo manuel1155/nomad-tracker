@@ -24,7 +24,7 @@
       <ion-item-sliding>
         <agm-map [style.height.px]="height" [zoom]="zoom" [latitude]="lat" [longitude]="lng">
           <agm-marker *ngFor="let marker of listaObras" 
-            [iconUrl]=" iconData"
+          [iconUrl]="marker.iconData"
             [latitude]="marker.lat_obra"
             [longitude]="marker.lon_obra"
             [markerDraggable]="false">
@@ -34,7 +34,7 @@
               <strong>estatus:</strong> {{ marker.estatus }}
             </agm-info-window>
           </agm-marker>
-          <agm-marker [markerDraggable]="true" [latitude]="lat" [longitude]="lng" (dragEnd)="markerDragEnd($event)">
+          <agm-marker [markerDraggable]="true" [zIndex]="10" [latitude]="lat" [longitude]="lng" (dragEnd)="markerDragEnd($event)">
           </agm-marker>
         </agm-map>
       </ion-item-sliding>
@@ -76,7 +76,7 @@
 
         <ion-item>
           <ion-label position="floating">Comentarios:</ion-label>
-          <ion-textarea class="rounded" rows="3" formControlName="comentarios" placeholder="Dirección de la obra..."></ion-textarea>
+          <ion-textarea class="rounded" rows="3" formControlName="comentarios" placeholder="Comentarios generales de la obra..."></ion-textarea>
         </ion-item>
 
       </form>

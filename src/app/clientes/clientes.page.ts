@@ -13,7 +13,6 @@ export class ClientesPage implements OnInit {
   constructor(private router: Router) { }
  
   ngOnInit() {
-    console.log('clientesPage ngOnInit')
   }
 
   goToAddCliente(){
@@ -22,12 +21,10 @@ export class ClientesPage implements OnInit {
 
   ionViewWillEnter() {
     // your initialization goes here
-    console.log('ionViewWillEnter clientesPage')
     this.tabClientes.ngOnInit();
   }
 
   ionViewWillLeave() {
-    console.log('ionViewWillLeave clientesPage')
     if (this.tabClientes) {
       this.tabClientes.ngOnDestroy();
     }

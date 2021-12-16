@@ -15,7 +15,6 @@ export class ProspectoService {
   async createProspecto(post:any) {
     return new Promise((resolve) => {     
       post['idSistema'] = post['id'].substring(0, 5).toUpperCase();
-      console.log(post);
       this.afs.collection('smaug/totalconcretos/usuarios/' + post['user_reg'] + '/ubicaciones_cambaceo').add({
         f_registro: new Date(),
         user_reg: post['user_reg'],
@@ -48,7 +47,6 @@ export class ProspectoService {
 
     let iDia = new Date(inicioDia);
     let fDia = new Date(finDia);
-    console.log('consulta del dia '+iDia);
     return this.afs.collection('smaug').doc('totalconcretos').collection('prosp_cambaceo', ref =>
       ref
         .where('user_reg', '==', idVendedor)
@@ -66,7 +64,6 @@ export class ProspectoService {
     let finDia = this.datePipe.transform(new Date(fechaString + ' 23:59'), 'yyyy-MM-dd HH:mm');
     let fDia = new Date(finDia);
 
-    console.log('consulta incompletos '+fDia);
     return this.afs.collection('smaug').doc('totalconcretos').collection('prosp_cambaceo', ref =>
       ref
         .where('user_reg', '==', idVendedor)

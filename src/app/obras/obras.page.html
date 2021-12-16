@@ -13,15 +13,57 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class='content-cli content-f1'>
-  <span *ngIf="currentCli!=null">
-    Listado de obras del cliente: {{ currentCli.nombre_cli }}
+<ion-content [fullscreen]="true" class="form-content content-f1" id="obras">
+  <br>
+  <span *ngIf="currentCli!=null" style="font-size: large;">
+    <b>Obras del cliente:</b> {{ currentCli.nombre_cli }}
   </span>
-  <app-obras-tab #tabObras [detCliente]="currentCli"></app-obras-tab>
-<br>
-  <section class="ion-text-center">
+  <br>
+  <ion-item>
+    <ion-input type="text" #Filtro1  placeholder="Filtro por nombre..." [ngModel]="textFilter"  (ngModelChange)="updateFilter($event)"></ion-input>
+    <ion-buttons slot="end">
+      <ion-button (click)="openFiltros()">
+        <ion-icon slot="icon-only" name="funnel"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <br>
+
+
+  <app-obras-tab #tabObras [detCliente]="currentCli" [filtros]="dataFiltros"></app-obras-tab>
+  <br>
+  <section class="ion-text-center" *ngIf="currentCli!=null">
     <ion-button color="warning" (click)="backClientes()">
       <ion-icon name="arrow-back"></ion-icon> Regresar
     </ion-button>
   </section>
 </ion-content>
+
+<ion-menu side="end" class="pruebamenu" menuId="filtros" contentId="obras" (ionDidClose)="closeFiltros()">
+  <ion-header>
+    <ion-toolbar color="dark">
+      <ion-title>Filtros</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <form [formGroup]="formFiltros">
+      <ion-list>
+        <ion-item>
+          <ion-radio-group formControlName="obras">
+            <ion-list-header>
+              <ion-label>Obras</ion-label>
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Todas</ion-label>
+              <ion-radio slot="start" value="todas"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Propias</ion-label>
+              <ion-radio slot="start" value="propias"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-item>
+      </ion-list>
+    </form>
+  </ion-content>
+</ion-menu>

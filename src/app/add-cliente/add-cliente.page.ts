@@ -32,29 +32,23 @@ export class AddClientePage implements OnInit {
       num_cont_admin_cli: '',
     });
 
-    console.log(this.origen);
-    console.log(this.router.getCurrentNavigation());
     if (this.router.getCurrentNavigation() != null) {
       this.route.queryParams.subscribe(async params => {
-        console.log(this.router);
         if (this.router.getCurrentNavigation().extras.state) {
-          console.log('con parametros')
           this.currentCli = this.router.getCurrentNavigation().extras.state.prosp;
           this.loadCliData();
         } else {
-          console.log('sin parametros origen cliente')
           this.currentCli = null;
         }
       });
     } else {
-      console.log('sin parametros origen modal')
       this.currentCli = null;
     }
 
   }
 
   ngOnInit() {
-    console.log(this.origen)
+
   }
 
   loadCliData() {

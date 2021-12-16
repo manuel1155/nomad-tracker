@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { AuthService } from '../servicios/auth/auth.service';
@@ -7,7 +7,9 @@ import * as firebase from 'firebase/app';
 import { NavController, Platform } from '@ionic/angular';
 import { ObrasService } from '../servicios/obras/obras.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { ClientesService } from '../servicios/clientes/clientes.service';
 
 @Component({
   selector: 'app-add-visita',
@@ -17,24 +19,39 @@ import { Router } from '@angular/router';
 export class AddVisitaPage implements OnInit {
 
   done: boolean = false;
-  step = 1;
+  @Input() step = 1;
   tipoObra: string;
 
-  currentObra: any = null;
+  verHist: boolean = false;
 
-  seguimiento: boolean = false;
+  detCliente: any = {
+    idCli: null,
+    nombreCli: null,
+  }
+  tipo_seg: string = "";
+  accion_seg: string = "";
+  currentObra: any = null;
+  verAddCli: boolean = false;
+
+  verAsigCli: boolean = false;
+  SelCliente: any = null;
+
   f_seguimiento = '';
   h_seguimiento = '';
 
   comenttariosVisita: string = '';
-  motivoGral: string = '';
   estatusObra: string = '';
+
+  motivoGeneralTerm: string = "";
 
   today = '';
   maxDate = '';
 
   lat: number = 0;
   lng: number = 0;
+
+  latUser: number = 0;
+  lngUser: number = 0;
   zoom: number = 12;
 
   listaObras = [];
@@ -52,6 +69,10 @@ export class AddVisitaPage implements OnInit {
   }
 
   formObra: FormGroup;
+  formCliente: FormGroup;
+
+  textFilter: string = '';
+  dataFiltros: any = null;
 
   constructor(
     private auth: AuthService,
@@ -62,6 +83,8 @@ export class AddVisitaPage implements OnInit {
     private obrasServ: ObrasService,
     private fb: FormBuilder,
     public router: Router,
+    private cliService: ClientesService,
+    private route: ActivatedRoute
   ) {
     this.height = platform.height() - 350;
 
@@ -73,11 +96,39 @@ export class AddVisitaPage implements OnInit {
       direccion_vendedor: ['', Validators.required],
       comentarios: '',
     });
+
+    this.formCliente = this.fb.group({
+      nombre_cli: ['', Validators.required],
+      rfc_cli: '',
+      name_cont_admin_cli: '',
+      num_cont_admin_cli: '',
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        let step2 = this.router.getCurrentNavigation().extras.state.step;
+        console.log(step2)
+        if (step2 === 10) {
+          this.cambioStep(1, 'nueva');
+        }
+        if (step2 === 20) {
+          this.currentObra=this.router.getCurrentNavigation().extras.state.obra;
+          this.tipoObra = "existente";
+          console.log(this.currentObra)
+          this.cambioStep(2);
+        }
+      }
+    });
   }
 
   async ngOnInit(): Promise<void> {
 
     this.checkGPSPermission();
+
+    this.dataFiltros = new BehaviorSubject({
+      obras: 'todas',
+      textFilter: '',
+    });
 
   }
 
@@ -86,7 +137,22 @@ export class AddVisitaPage implements OnInit {
     if (currentStep == 1) {
       if (opcion == "existente") this.step = currentStep + 1;
       else {
-        this.obrasServ.getListObrasAll().subscribe(data => {
+        this.obrasServ.getListObrasAll().subscribe(async data => {
+          await new Promise<void>((resolve)=>{
+            for(let obra of data){
+              let urlMarker='';
+              if(obra.currentVendedor === this.auth.dataUser['idNumerico']) urlMarker="./../../assets/img/obra_propia.png";
+              else  urlMarker="./../../assets/img/obra_otros.png";
+              obra['iconData']={
+                url: urlMarker,
+                scaledSize: {
+                  width: 35,
+                  height: 35
+                }
+              }
+            }
+            resolve();
+          })
           this.listaObras = data;
           this.step = currentStep + 3;
         })
@@ -94,19 +160,68 @@ export class AddVisitaPage implements OnInit {
       this.tipoObra = opcion
 
     } else if (currentStep == 2) {
-      this.step = currentStep + 1;
+      console.log(this.currentObra)
+      if (this.currentObra.estatus == 'seguimiento') {
 
-      let hoy = new Date()
+        let f_seg = this.currentObra['f_seguimiento'].toDate();
 
-      var dd = String(hoy.getDate()).padStart(2, '0');
-      var mm = String(hoy.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = hoy.getFullYear();
+        let date = ("0" + f_seg.getDate()).slice(-2);
+        // current month
+        let month = ("0" + (f_seg.getMonth() + 1)).slice(-2);
+        // current year
+        let year = f_seg.getFullYear();
+        // current hours
+        let hours = f_seg.getHours();
+        // current minutes
+        let minutes = f_seg.getMinutes();
+        // current seconds
+        let seconds = f_seg.getSeconds();
+        // prints date & time in YYYY-MM-DD HH:MM:SS format
+        let date_str = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+        console.log(date + "-" + month + "-" + year + " " + hours + ":" + minutes);
 
-      this.today = yyyy + '-' + mm + '-' + dd
-      this.maxDate = (yyyy + 1) + '-' + mm + '-' + dd
+        Swal.fire({
+          title: 'Obra en seguimiento',
+          text: "¿La obra tiene un seguimiento programado para el " + date_str + " seguro que deseas registrar la visita?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, deseo registrar la visita',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.step = currentStep + 1;
 
-      this.f_seguimiento = hoy.toISOString();
-      this.h_seguimiento = hoy.toISOString();
+            let hoy = new Date()
+
+            var dd = String(hoy.getDate()).padStart(2, '0');
+            var mm = String(hoy.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = hoy.getFullYear();
+
+            this.today = yyyy + '-' + mm + '-' + dd
+            this.maxDate = (yyyy + 1) + '-' + mm + '-' + dd
+
+            this.f_seguimiento = hoy.toISOString();
+            this.h_seguimiento = hoy.toISOString();
+          }
+        })
+
+      } else {
+        this.step = currentStep + 1;
+
+        let hoy = new Date()
+
+        var dd = String(hoy.getDate()).padStart(2, '0');
+        var mm = String(hoy.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = hoy.getFullYear();
+
+        this.today = yyyy + '-' + mm + '-' + dd
+        this.maxDate = (yyyy + 1) + '-' + mm + '-' + dd
+
+        this.f_seguimiento = hoy.toISOString();
+        this.h_seguimiento = hoy.toISOString();
+      }
 
     } else if (currentStep == 4) {
       this.step = currentStep + 1;
@@ -130,6 +245,9 @@ export class AddVisitaPage implements OnInit {
   }
 
   backStep() {
+    if (this.step == 2 && this.tipoObra == "existente") {
+      this.step = 1;
+    }
     if (this.step == 3 && this.tipoObra == "existente") {
       this.step = 2;
     } else if (this.step == 3 && this.tipoObra == "nueva") {
@@ -141,30 +259,30 @@ export class AddVisitaPage implements OnInit {
 
   verObra(event: any) {
     this.currentObra = event.detObra
-    console.log(this.currentObra)
   }
 
-  cambioToggle(event: any) {
-    console.log(this.seguimiento);
+
+
+  updateFilter(text) {
+    this.textFilter = text;
+    let dataFiltros2 = {
+      obras: 'propias',
+      textFilter: this.textFilter
+    };
+    this.dataFiltros.next(dataFiltros2);
+    console.log(this.listaObras);
   }
 
-  validaExistente() {
-    if (this.seguimiento) {
+
+  validaVisita() {
+    if (this.estatusObra == 'terminada') {
+      return (this.motivoGeneralTerm != '' && this.comenttariosVisita != '')
+    } else {
       return (this.comenttariosVisita != '' &&
         this.f_seguimiento != '' &&
-        this.h_seguimiento != '')
-    } else {
-      return (this.comenttariosVisita != '' && this.estatusObra != '')
-    }
-  }
-
-  validaNueva() {
-    if (this.seguimiento) {
-      return (this.comenttariosVisita != '' &&
-        this.f_seguimiento != '' &&
-        this.h_seguimiento != '')
-    } else {
-      return (this.comenttariosVisita != '' && this.estatusObra != '')
+        this.h_seguimiento != '' &&
+        this.tipo_seg != '' &&
+        this.accion_seg != '')
     }
   }
 
@@ -181,19 +299,23 @@ export class AddVisitaPage implements OnInit {
 
     let post = {}
 
-    if (this.seguimiento) {
+    if (this.estatusObra != 'terminada') {
       let f_seg = new Date(this.f_seguimiento);
       let h_seg = new Date(this.h_seguimiento);
       post['estatus'] = 'seguimiento';
-      console.log(f_seg.toISOString().substring(0, 10) + ' ' + h_seg.toTimeString().split(' ')[0])
+      post['motivoGral'] = this.estatusObra;
+      post['tipo_seg'] = this.tipo_seg;
+      post['accion_seg'] = this.accion_seg;
       post['f_seguimiento'] = new Date(f_seg.toISOString().substring(0, 10) + ' ' + h_seg.toTimeString().split(' ')[0]);
     } else {
-      post['estatus'] = this.estatusObra;
+      post['estatus'] = 'terminada';
+      post['motivoGral'] = this.motivoGeneralTerm;
+      post['f_termino'] = new Date();
+      post['user_termino'] = this.auth.currentUserId;
     }
 
     let historial = []
     if (this.tipoObra == 'existente') {
-      console.log('obra existente')
       if (this.currentObra.historial) {
         historial = this.currentObra.historial
       }
@@ -202,9 +324,13 @@ export class AddVisitaPage implements OnInit {
         fecha: new Date(),
         observaciones: this.comenttariosVisita,
         idVendedor: this.auth.currentUserId,
-        vendedorName: this.auth.dataUser['displayName']
+        vendedorName: this.auth.dataUser['displayName'],
+        estatus: post['estatus'],
+        motivoGral: post['motivoGral'],
+        ubic_user: new firebase.firestore.GeoPoint(this.latUser, this.lngUser)
       })
-      post['historial']=historial;
+      post['historial'] = historial;
+
       post['user_mod'] = this.auth.currentUserId;
       post['f_modificado'] = new Date();
       post['idSistema'] = this.currentObra.idSistema;
@@ -212,7 +338,6 @@ export class AddVisitaPage implements OnInit {
       post['vendedorName'] = this.auth.dataUser['displayName'];
       post['currentVendedor'] = this.auth.dataUser['idNumerico'];
 
-      console.log(post);
       this.obrasServ.updateObra(post).then((data) => {
         Swal.close();
         Swal.fire({
@@ -226,15 +351,23 @@ export class AddVisitaPage implements OnInit {
       });
 
     } else if (this.tipoObra == 'nueva') {
-      console.log('crea obra')
+
       historial.push({
         fecha: new Date(),
         observaciones: this.comenttariosVisita,
         idVendedor: this.auth.currentUserId,
-        vendedorName: this.auth.dataUser['displayName']
+        vendedorName: this.auth.dataUser['displayName'],
+        estatus: post['estatus'],
+        motivoGral: post['motivoGral'],
+        ubic_user: new firebase.firestore.GeoPoint(this.latUser, this.lngUser)
       })
 
-      post['historial']=historial;
+      post['historial'] = historial;
+
+      if (this.detCliente.idCli) {
+        post['idCli'] = this.detCliente.idCli;
+        post['nombreCli'] = this.detCliente.nombreCli;
+      }
       post['user_reg'] = this.auth.currentUserId;
       post['vendedorName'] = this.auth.dataUser['displayName'];
       post['currentVendedor'] = this.auth.dataUser['idNumerico'];
@@ -247,7 +380,6 @@ export class AddVisitaPage implements OnInit {
 
       post = { ...post, ...this.formObra.value }
 
-      console.log(post);
       this.obrasServ.createObra(post).then((data) => {
         Swal.close();
         Swal.fire({
@@ -263,36 +395,125 @@ export class AddVisitaPage implements OnInit {
         });
       });
     }
+
+    /*
+        try {
+    
+          
+    
+          if (this.seguimiento) {
+            let f_seg = new Date(this.f_seguimiento);
+            let h_seg = new Date(this.h_seguimiento);
+            post['estatus'] = 'seguimiento';
+            post['f_seguimiento'] = new Date(f_seg.toISOString().substring(0, 10) + ' ' + h_seg.toTimeString().split(' ')[0]);
+          } else {
+            post['estatus'] = this.estatusObra;
+          }
+    
+          let historial = []
+          if (this.tipoObra == 'existente') {
+            if (this.currentObra.historial) {
+              historial = this.currentObra.historial
+            }
+    
+            historial.push({
+              fecha: new Date(),
+              observaciones: this.comenttariosVisita,
+              idVendedor: this.auth.currentUserId,
+              vendedorName: this.auth.dataUser['displayName'],
+              estatus: post['estatus']
+            })
+            post['historial'] = historial;
+            post['user_mod'] = this.auth.currentUserId;
+            post['f_modificado'] = new Date();
+            post['idSistema'] = this.currentObra.idSistema;
+            post['id'] = this.currentObra.id;
+            post['vendedorName'] = this.auth.dataUser['displayName'];
+            post['currentVendedor'] = this.auth.dataUser['idNumerico'];
+    
+            this.obrasServ.updateObra(post).then((data) => {
+              Swal.close();
+              Swal.fire({
+                title: "Obra modificada",
+                text: "La obra ha sido modificado correctamente.",
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                this.goToHome();
+              });
+            });
+    
+          } else if (this.tipoObra == 'nueva') {
+            historial.push({
+              fecha: new Date(),
+              observaciones: this.comenttariosVisita,
+              idVendedor: this.auth.currentUserId,
+              vendedorName: this.auth.dataUser['displayName'],
+              estatus: post['estatus']
+            })
+    
+            post['historial'] = historial;
+            post['user_reg'] = this.auth.currentUserId;
+            post['vendedorName'] = this.auth.dataUser['displayName'];
+            post['currentVendedor'] = this.auth.dataUser['idNumerico'];
+            post['lat_obra'] = this.lat;
+            post['lon_obra'] = this.lng;
+            post['ubic_obra'] = new firebase.firestore.GeoPoint(this.lat, this.lng)
+            post['direccion_google'] = this.direccion;
+            post['user_mod'] = this.auth.currentUserId;
+            post['f_modificado'] = new Date();
+    
+            post = { ...post, ...this.formObra.value }
+    
+            this.obrasServ.createObra(post).then((data) => {
+              Swal.close();
+              Swal.fire({
+                title: "Obra registrada",
+                text: "El obra ha sido registrada correctamente; el ID con el que se registro es " + data['idSistema'] + ".",
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                this.formObra.reset();
+                this.lat = null;
+                this.lng = null;
+                this.goToHome();
+              });
+            });
+          }
+    
+        } catch (error) {
+          Swal.close();
+          Swal.fire({
+            title: "Error de registro addVisita " + error.name,
+            text: error
+          })
+        }
+    */
   }
 
-  goToHome(){
-    this.router.navigate(['/home'],{ replaceUrl: true })
+  goToHome() {
+    this.router.navigate(['/home'], { replaceUrl: true })
   }
 
 
   checkGPSPermission() {
-    console.log('Checando los permisos de la APP');
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
       result => {
         if (result.hasPermission) {
-          console.log('app CON permisos');
           //If having permission show 'Turn On GPS' dialogue
           this.askToTurnOnGPS();
         } else {
-          console.log('app SIN permisos');
           //If not having permission ask for permission
           this.requestGPSPermission();
         }
       },
       err => {
-        console.log('error de librerias')
         alert(err);
       }
     );
   }
 
   requestGPSPermission() {
-    console.log('solicitar permisos de al usuario');
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
         console.log("4");
@@ -302,12 +523,10 @@ export class AddVisitaPage implements OnInit {
           .then(
             () => {
               // call method to turn on GPS
-              console.log('usuario otorga permisos a la APP');
               this.askToTurnOnGPS();
             },
             error => {
-              //Show alert if user click on 'No Thanks'
-              console.log('usuario niega permisos a la APP');
+              //Show alert if user click on 'No Thanks
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -325,16 +544,13 @@ export class AddVisitaPage implements OnInit {
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
       async () => {
-        console.log('usuario activa el GPS');
         // When GPS Turned ON call method to get Accurate location coordinates
         //this.getGeolocation()
         this.geoCoder = new google.maps.Geocoder;
         await this.setCurrentLocation();
         this.done = true;
-        console.log(this.lat, this.lng)
       },
       error => {
-        console.log('Usuario no activa el GPS');
         alert('Error requesting location permissions ' + JSON.stringify(error))
         Swal.fire({
           icon: 'error',
@@ -354,11 +570,11 @@ export class AddVisitaPage implements OnInit {
         navigator.geolocation.getCurrentPosition((position) => {
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
+          this.latUser = position.coords.latitude;
+          this.lngUser = position.coords.longitude;
           this.zoom = 16;
 
           this.geoCoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, (results, status) => {
-            console.log(results);
-            console.log(status);
             if (status === 'OK') {
               if (results[0]) {
                 this.direccion = results[0].formatted_address;
@@ -381,8 +597,7 @@ export class AddVisitaPage implements OnInit {
 
   getAddress(latitude, longitude) {
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
+
       if (status === 'OK') {
         if (results[0]) {
           this.direccion = results[0].formatted_address;
@@ -398,10 +613,100 @@ export class AddVisitaPage implements OnInit {
   }
 
   markerDragEnd($event: google.maps.MouseEvent) {
-    console.log($event.latLng.lat(), $event.latLng.lng());
     this.lat = $event.latLng.lat();
     this.lng = $event.latLng.lng();
     this.getAddress(this.lat, this.lng);
   }
 
+  activarSeccion(seccion: string) {
+    if (seccion == 'verAsigCli') {
+      this.verAsigCli = true; this.step = 0;
+    }
+    else this.verAsigCli = false;
+
+    if (seccion == 'verAddCli') this.verAddCli = true;
+    else this.verAddCli = false;
+
+  }
+
+  verCliente(event: any) {
+    this.SelCliente = event.detCliente;
+  }
+
+  asigClienteFn() {
+    console.log(this.SelCliente);
+
+    if (this.tipoObra == 'existente') {
+      let post = {
+        id: this.currentObra.id,
+        idCli: this.SelCliente.id,
+        nombreCli: this.SelCliente.nombre_cli
+      }
+
+      post['user_mod'] = this.auth.currentUserId;
+      post['f_modificado'] = new Date();
+      this.obrasServ.updateObra(post).then((data) => {
+        Swal.close();
+        Swal.fire({
+          title: "Obra modificada",
+          text: "La obra ha sido modificado correctamente.",
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(async () => {
+          let resp = await this.cliService.setAddObra(this.SelCliente.id)
+          this.currentObra['idCli'] = this.SelCliente.id;
+          this.currentObra['nombreCli'] = this.SelCliente.nombre_cli;
+          this.SelCliente = null;
+          this.activarSeccion('verEventDet');
+          this.step = 3;
+        });
+      });
+    } else if (this.tipoObra == 'nueva') {
+      this.detCliente = {
+        idCli: this.SelCliente.id,
+        nombreCli: this.SelCliente.nombre_cli
+      }
+      this.activarSeccion('verEventDet');
+      this.step = 3;
+    }
+
+  }
+
+  guardarCli() {
+
+    Swal.fire({
+      title: "Registrando Clente",
+      text: "La información se esta subiendo al sistema",
+      showCloseButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+
+    let post = this.formCliente.value;
+
+    post['user_reg'] = this.auth.currentUserId;
+    this.cliService.createCliente(post).then((data) => {
+      Swal.close();
+      Swal.fire({
+        title: "Cliente registrado",
+        text: "El cliente ha sido registrado correctamente, el ID con el que se registro es " + data['idSistema'] + ".",
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      }).then(() => {
+        this.formCliente.reset();
+        this.activarSeccion('verAsigCli');
+      });
+    });
+  }
+
+  cancelCliente() {
+    this.verAsigCli = false;
+    this.step = 3;
+  }
+
+  activarHistorial() {
+    if (this.verHist) this.verHist = false;
+    else this.verHist = true;
+  }
 }

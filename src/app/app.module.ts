@@ -28,6 +28,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @NgModule({
   declarations: [AppComponent,SidemenuComponent],
@@ -51,6 +52,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
     NativeGeocoder,
     AndroidPermissions,
     LocationAccuracy,
+    CallNumber,
     AngularFirestoreModule,
     { provide: LOCALE_ID, useValue: "es-MX" },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

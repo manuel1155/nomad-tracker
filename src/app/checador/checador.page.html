@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title id="bienvenida1">Checador</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="content-f1">
+
+  <!-- Rounded switch -->
+
+  <div class="spin spinner-center" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <div *ngIf="done">
+
+
+    <div class="container">
+      <div class="child">
+        <div class="msg" *ngIf="!entrada">
+          <span style="font-size: large; font-weight: bold;">Registrar ingreso</span>
+          <p style="padding-top: 20px;">Realiza un registro de entrada antes de comenzar a laborar</p>
+        </div>
+        <div class="msg" *ngIf="entrada">
+          <span style="font-size: large; font-weight: bold;">Registrar salida</span>
+          <p style="padding-top: 20px;">Actualmete estas activo, registra tu salida cuando termines de laborar</p>
+        </div>
+        <br>
+        <div class="check">
+          <label class="switch">
+            <input type="checkbox" [ngModel]="entrada" (ngModelChange)="registroEntrada()">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+
+    <ion-list>
+      <ion-item>
+        Registros del día {{ date | date:'d-MMM-yy' }} <ion-badge slot="end" *ngIf="entrada">Activo</ion-badge>
+        <ion-badge slot="end" *ngIf="!entrada">Inactivo</ion-badge>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+
+      <ion-item *ngFor="let reg of listCheck">
+        <ion-avatar slot="start">
+          <img src="./../../assets/img/salida.png" *ngIf="reg.tipoReg == 'salida'">
+          <img src="./../../assets/img/entrada.png" *ngIf="reg.tipoReg == 'entrada'">
+        </ion-avatar>
+        <ion-label>
+          <h3>{{ reg.tipoReg | titlecase }}</h3>
+          <p>Registraste tu {{ reg.tipoReg }} a las {{ reg.f_registro.seconds * 1000 | date:'shortTime'}}</p>
+        </ion-label>
+      </ion-item>
+
+    </ion-list>
+
+  </div>
+
+
+</ion-content>

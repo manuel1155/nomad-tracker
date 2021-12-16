@@ -18,7 +18,7 @@
       <ion-item-sliding>
         <agm-map [latitude]="latitude" [longitude]="longitude" (mapClick)="onMapClicked($event)">
           <agm-marker *ngIf="marker" [latitude]="marker.latitude" [longitude]="marker.longitude"
-            [markerDraggable]="marker.draggable"></agm-marker>
+            [markerDraggable]="marker.draggable" [iconUrl]="marker.iconData"></agm-marker>
         </agm-map>
       </ion-item-sliding>
       <ion-item>
@@ -62,7 +62,7 @@
 
       <ion-item>
         <ion-label position="floating">Comentarios:</ion-label>
-        <ion-textarea rows="3" formControlName="comentarios" placeholder="Dirección de la obra..."></ion-textarea>
+        <ion-textarea rows="3" formControlName="comentarios" placeholder="Comentarios generales de la obra..."></ion-textarea>
       </ion-item>
 
       </form>

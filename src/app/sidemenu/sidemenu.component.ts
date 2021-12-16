@@ -28,11 +28,30 @@ export class SidemenuComponent implements OnInit {
       url: '/obras',
       icon: 'construct'
     },
-    {
+   /*  {
       title: 'Reg Visita',
       url: '/add-visita',
+      icon: 'pin'
+    }, */{
+      title: 'Seguimientos',
+      url: '/calendario',
+      icon: 'calendar'
+    },{
+      title: 'Mapa de Obras',
+      url: '/maps-temp',
       icon: 'map'
+    },
+    {
+      title: 'Colados',
+      url: '/calendario-colados',
+      icon: 'Calendar'
+    },
+    {
+      title: 'Checador',
+      url: '/checador',
+      icon: 'alarm'
     }
+
   ];
 
   
@@ -41,6 +60,7 @@ export class SidemenuComponent implements OnInit {
     private menuCtrl: MenuController) { }
 
   ngOnInit() {
+    
     this.auth.userDetails().subscribe(async user => {
       if (user !== null) {
         this.auth.currentUser = user;

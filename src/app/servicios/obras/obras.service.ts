@@ -22,7 +22,6 @@ export class ObrasService {
     post['f_modificado'] = new Date();
     post['f_termiado'] = '';
 
-    console.log(post);
     
     if(post['idCli']){
       await new Promise<void>((resolve) => {
@@ -37,7 +36,6 @@ export class ObrasService {
 
     return new Promise((resolve) => {
       post['idSistema'] = post['id'].substring(0, 6).toUpperCase();
-      console.log(post);
       this.afs.doc('smaug/totalconcretos/obras_cambaceo/' + post['id']).set(post).then(() => {
         resolve({ success: true, idSistema: post['idSistema'] })
       });
@@ -62,6 +60,14 @@ export class ObrasService {
     return this.afs.collection('smaug').doc('totalconcretos').collection('obras_cambaceo', ref =>
       ref
         .where('idCli', '==', idCli)
+    ).valueChanges();
+  }
+
+  getListObrasSegVend(idVendNum: string) {
+    return this.afs.collection('smaug').doc('totalconcretos').collection('obras_cambaceo', ref =>
+      ref
+        .where('currentVendedor', '==', idVendNum)
+        .where('estatus', '==', 'seguimiento')
     ).valueChanges();
   }
 }

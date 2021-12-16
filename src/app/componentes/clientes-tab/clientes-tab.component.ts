@@ -35,13 +35,10 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log(this.origen);
-    console.log('init clientes-tab componente');
     this.getDataClientes();
   }
 
   ngOnDestroy(): void {
-    console.log('destroy clientes-tab componente')
     this.subscriptios.unsubscribe();
   }
 
@@ -54,7 +51,6 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
         this.dataClientes = [];
         await new Promise<void>((resolve) => {
           this.cliService.getListClientes().subscribe(data => {
-            console.log(data);
             this.dataClientes = data;
             this.dataClientes.sort(function (a, b) {
               return new Date(b.f_creado.seconds * 1000).getTime() - new Date(a.f_creado.seconds * 1000).getTime();
@@ -93,7 +89,6 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
         prosp: cli
       }
     };
-    console.log(cli);
     this.router.navigate(['/add-cliente'], navigationExtras);
   }
 
@@ -103,12 +98,10 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
         detCli: detCli
       }
     };
-    console.log(detCli);
     this.router.navigate(['/obras'], navigationExtras);
   }
 
   selectCliente(post: any) {
-    console.log(post);
     let detCliente = {
       id: post['id'],
       idSistema: post['idSistema'],
@@ -122,7 +115,6 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
   }
 
   async addClienteModal() {
-    console.log('clic open modal');
     const modal = await this.modalController.create({
       component: AddClientePage,
       cssClass: 'my-custom-class',
@@ -133,7 +125,6 @@ export class ClientesTabComponent implements OnInit,OnDestroy {
 
     modal.onDidDismiss().then((detail) => {
       if (detail !== null) {
-        console.log('The result:', detail.data);
       }
     });
     return await modal.present();

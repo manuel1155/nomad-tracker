@@ -8,14 +8,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="content-f1">
-  
-  <div id="container">
+
+<div id="container">
     <strong>Acerca de esta app:</strong>
     <br>
-
-<p>
-  El uso de esta app es para el registro y control de los prospectos de la empresa <b>TOTAL CONCRETOS</b>.
-</p>
+    <p>
+      El uso de esta app es para el registro y control de los prospectos de la empresa <b>TOTAL CONCRETOS</b>.
+    </p>
   </div>
-  
+
+   <!-- <div class="alerta">
+    <strong>No tienes obras activas:</strong>
+    <br>
+    <p *ngIf="false">
+      Las obras registradas en el sistema estan en seguimiento o terminadas.
+    </p>
+    <p *ngIf="true">
+      No tienes obras registradas en el sistema.
+    </p>
+  </div>-->
+
 </ion-content>
