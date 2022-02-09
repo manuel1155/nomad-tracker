@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>CRM</name>
-    <description>Control de prospectos para ventas cambaceo.</description>
+<widget id="com.nomadtracker.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Nomad Tracker</name>
+    <description>Seguimientos de envios en tiempo real.</description>
     <author email="manuel_1155hotmail.com" href="http://ionicframework.com/">José Manuel Esquivel Baldazo</author>
     <content src="index.html" />
     <access origin="*" />

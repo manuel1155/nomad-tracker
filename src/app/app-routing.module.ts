@@ -14,58 +14,14 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
-  },
-  {
-    path: 'reg-prosp-ini',
-    loadChildren: () => import('./reg-prosp-ini/reg-prosp-ini.module').then( m => m.RegProspIniPageModule)
-  },
-  {
-    path: 'prospectos-list',
-    loadChildren: () => import('./prospectos-list/prospectos-list.module').then( m => m.ProspectosListPageModule)
-  },
-  {
-    path: 'add-visita',
-    loadChildren: () => import('./add-visita/add-visita.module').then( m => m.AddVisitaPageModule)
-  },
-  {
-    path: 'add-cliente',
-    loadChildren: () => import('./add-cliente/add-cliente.module').then( m => m.AddClientePageModule)
-  },
-  {
-    path: 'add-obra',
-    loadChildren: () => import('./add-obra/add-obra.module').then( m => m.AddObraPageModule)
-  },
-  {
-    path: 'clientes',
-    loadChildren: () => import('./clientes/clientes.module').then( m => m.ClientesPageModule)
-  },
-  {
-    path: 'obras',
-    loadChildren: () => import('./obras/obras.module').then( m => m.ObrasPageModule)
-  },
-  {
-    path: 'maps-temp',
-    loadChildren: () => import('./maps-temp/maps-temp.module').then( m => m.MapsTempPageModule)
-  },
-  {
-    path: 'check-permisos',
-    loadChildren: () => import('./check-permisos/check-permisos.module').then( m => m.CheckPermisosPageModule)
-  },
-  {
-    path: 'add-obra-mod',
-    loadChildren: () => import('./add-obra-mod/add-obra-mod.module').then( m => m.AddObraModPageModule)
   },  {
-    path: 'calendario',
-    loadChildren: () => import('./calendario/calendario.module').then( m => m.CalendarioPageModule)
+    path: 'seguimientos-list',
+    loadChildren: () => import('./seguimientos-list/seguimientos-list.module').then( m => m.SeguimientosListPageModule)
   },
   {
-    path: 'calendario-colados',
-    loadChildren: () => import('./calendario-colados/calendario-colados.module').then( m => m.CalendarioColadosPageModule)
-  },
-  {
-    path: 'checador',
-    loadChildren: () => import('./checador/checador.module').then( m => m.ChecadorPageModule)
-  },
+    path: 'reg-seguimiento',
+    loadChildren: () => import('./reg-seguimiento/reg-seguimiento.module').then( m => m.RegSeguimientoPageModule)
+  }
 
 ];
 

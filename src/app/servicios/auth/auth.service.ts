@@ -4,6 +4,7 @@ import { User, auth } from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { Observable, Subject, from } from 'rxjs';
+import * as firebase from "firebase/app";
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class AuthService {
  
   async getUserData() {
     return new Promise(resolve => {
-        this.afs.doc('smaug/totalconcretos/usuarios/' + this.currentUserId).valueChanges().subscribe(data => {
+        this.afs.doc('smaug/nomadtracker/usuarios/' + this.currentUserId).valueChanges().subscribe(data => {
           if(data){
             this.dataUser = data;
             resolve('success');
@@ -69,8 +70,17 @@ export class AuthService {
     }));
   }
 
-  signInWithEmail(email: string, password: string): Promise<auth.UserCredential> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  signInWithEmail(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return new Promise<any>((resolve, reject) => {
+      this.afAuth.signInWithEmailAndPassword(email, password)
+      .then(
+        res => {
+          resolve(res),
+          //this.authenticationState.next(true)
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        },
+        err => reject(err))
+    })
   }
 
   signUpWithEmail(email: string, password: string): Promise<auth.UserCredential> {

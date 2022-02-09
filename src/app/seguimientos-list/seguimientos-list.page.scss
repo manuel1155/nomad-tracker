@@ -1,0 +1,100 @@
+.spin{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+ }
+
+ ion-spinner {
+   transform: scale(2);
+   color: mediumpurple;
+ }
+
+ ion-list{
+
+   background-color: transparent !important;
+
+   ion-item{
+      margin: 40px 20px 30px 20px;
+
+      border-radius: 10px;
+   }
+ }
+
+ .name{
+    margin: 0px;
+    padding: 0px;
+ }
+
+ .no-control{
+   margin: 0px;
+   padding: 0px;
+   color: #fde26d !important;
+ }
+
+ #hamburguesa2 {
+   color: #fde26d !important;
+ }
+
+ #tituloalumnos {
+   text-align: left;
+   margin-left: 0px;
+   padding-left: 0px;
+   position: relative;
+ }
+
+ //#nombre {
+//   padding-left: 15px;
+//   padding-top: 15px;
+ //}
+
+ #botonhijos {
+    margin-top: 15px;
+    margin-bottom: 11px;
+ }
+
+ .origen{
+   margin-top: 10px;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   padding-right: 5px;
+   padding-left: 5px;
+   color: rgb(0, 0, 0);
+   border-radius: 5px;
+   font-size: 10px;
+   background:rgb(212, 192, 6);
+   //display:flex;
+   justify-content:center;
+   align-items:center;
+   height:100%;
+ }
+
+ .destino{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 12px;
+  padding-left: 12px;
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  font-size: 10px;
+  background:rgb(66, 175, 52);
+   //display:flex;
+   justify-content:center;
+   align-items:center;
+   height:100%;
+ }
+
+ #ajusteboton{
+   font-size: large;
+ }
+
+ #conSeg{
+   margin-bottom: 15px;
+   margin-top: 0px;
+ }
+
+ #listTarjetaSeg{
+   margin-top: 22px;
+ }

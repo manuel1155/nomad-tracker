@@ -29,6 +29,8 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { Network } from '@ionic-native/network/ngx';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent,SidemenuComponent],
@@ -43,6 +45,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
     NgxDatatableModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
+    HttpClientModule,
   ],
   providers: [
     StatusBar,
@@ -53,6 +56,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
     AndroidPermissions,
     LocationAccuracy,
     CallNumber,
+    Network, 
     AngularFirestoreModule,
     { provide: LOCALE_ID, useValue: "es-MX" },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

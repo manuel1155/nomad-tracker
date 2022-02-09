@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar class="header-f1">
+    <ion-buttons slot="start" id="headerPrincipal">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Lista de Seguimientos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="content-f1">
+
+  <div class="spin" *ngIf="!done">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <ion-list id="listTarjetaSeg" *ngIf="done">
+
+    <ion-item id="conSeg" *ngFor="let seg of listSeg" color="tertiary" lines="none">
+
+      <ion-avatar slot="start" style="background-color: white; border: 3px solid white;">
+        <img src="./assets/img/seg_espera.png">
+        <span style="font-size: x-small;">{{ seg.inicio_tracker.toDate() | date:"mediumDate" }}</span>
+      </ion-avatar>
+      <div style="padding-top: 10px;">
+        <img src="./assets/img/camion_reparto.png" width="20" id="estrella"> <span id="nombre" class="name">Viaje
+          asignado</span>
+        <br><span class="no-control">{{ seg.guia }}</span>
+
+        <div class="origen">
+          <span><b>Origen:</b></span><br>
+          <span>{{ seg.origen_municipio }} , {{ seg.origen_estado }}</span>
+        </div>
+        <div class="destino">
+          <span><b>Destino:</b></span><br>
+          <span> {{seg.destino_municipio }} , {{ seg.destino_estado }}</span>
+        </div>
+        <ion-button expand="block" color="success" (click)="openTraker(seg)">
+          <img src="./assets/img/destino.png" width="20" />
+          Comenzar viaje
+        </ion-button>
+
+      </div>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
